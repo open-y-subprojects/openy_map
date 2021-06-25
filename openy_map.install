@@ -119,4 +119,25 @@ function openy_map_update_8006() {
     ->set('leaflet.base_layer', 'OpenStreetMap.Mapnik')
     ->save(TRUE);
   }
+  
+ /**
+ * Update path to icons.
+ */
+function openy_map_update_8007() {
+  $config_dir = drupal_get_path('module', 'openy_map') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'views.view.locations' => [
+      'display',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
 }
