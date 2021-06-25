@@ -1,8 +1,8 @@
 map_engine: leaflet
 leaflet:
   base_layer: 'OpenStreetMap.Mapnik'
-  search_icon: '/profiles/contrib/openy/modules/custom/openy_map/img/other/map_icon_red.png'
-  search_icon_retina: '/profiles/contrib/openy/modules/custom/openy_map/img/other/map_icon_red_x2.png'
+  search_icon: '/modules/contrib/openy_map/img/other/map_icon_red.png'
+  search_icon_retina: '/modules/contrib/openy_map/img/other/map_icon_red_x2.png'
   base_layer_override:
     enable: 0
     override: ''
@@ -23,6 +23,6 @@ active_types:
   camp: 'Camps'
   facility: 'Facilities'
 type_icons:
-  branch: '/profiles/contrib/openy/modules/custom/openy_map/img/map_icon_blue.png'
-  camp: '/profiles/contrib/openy/modules/custom/openy_map/img/map_icon_green.png'
-  facility: '/profiles/contrib/openy/modules/custom/openy_map/img/map_icon_green.png'
+  branch: '/modules/contrib/openy_map/img/map_icon_blue.png'
+  camp: '/modules/contrib/openy_map/img/map_icon_green.png'
+  facility: '/modules/contrib/openy_map/img/map_icon_green.png'
