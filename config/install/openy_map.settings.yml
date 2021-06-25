@@ -1,28 +1,29 @@
 map_engine: leaflet
 leaflet:
-  base_layer: 'OpenStreetMap.Mapnik'
-  search_icon: '/modules/contrib/openy_map/img/other/map_icon_red.png'
-  search_icon_retina: '/modules/contrib/openy_map/img/other/map_icon_red_x2.png'
+  base_layer: OpenStreetMap.Mapnik
+  search_icon: 'modules/custom/openy_map/img/other/map_icon_red.png'
+  search_icon_retina: 'modules/custom/openy_map/img/other/map_icon_red_x2.png'
   base_layer_override:
     enable: 0
-    override: ''
+    pattern: ''
+  location: 'United States of America'
 default_tags:
-  branch: 'YMCA'
-  camp: 'Camps'
+  branch: YMCA
+  camp: Camps
   facility: ''
 block_labels:
-  branch: 'YMCAs'
-  camp: 'Camps'
-  facility: 'Facilities'
+  branch: YMCAs
+  camp: Camps
+  facility: Facilities
 type_labels:
-  branch: 'YMCA'
-  camp: 'Camps'
-  facility: 'Facilities'
+  branch: YMCA
+  camp: Camps
+  facility: Facilities
 active_types:
-  branch: 'YMCA'
-  camp: 'Camps'
-  facility: 'Facilities'
+  branch: YMCA
+  camp: Camps
+  facility: Facilities
 type_icons:
-  branch: '/modules/contrib/openy_map/img/map_icon_blue.png'
-  camp: '/modules/contrib/openy_map/img/map_icon_green.png'
-  facility: '/modules/contrib/openy_map/img/map_icon_green.png'
+  branch: modules/contrib/openy_map/img/map_icon_blue.png
+  camp: modules/contrib/openy_map/img/map_icon_green.png
+  facility: modules/contrib/openy_map/img/map_icon_purple.png
