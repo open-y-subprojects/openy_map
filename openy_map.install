@@ -119,6 +119,7 @@ function openy_map_update_8006() {
     ->set('leaflet.base_layer', 'OpenStreetMap.Mapnik')
     ->save(TRUE);
   }
+}
   
  /**
  * Update path to icons.
