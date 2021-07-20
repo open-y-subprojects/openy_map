@@ -124,21 +124,5 @@ function openy_map_update_8006() {
  * Update path to icons.
  */
 function openy_map_update_8007() {
-  $config_dir = drupal_get_path('module', 'openy_map') . '/config/install/';
-  // Update multiple configurations.
-  $configs = [
-    'openy_map.settings' => [
-      'leaflet',
-      'type_icons'
-    ],
-  ];
-
-  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  foreach ($configs as $config_name => $params) {
-    $config = $config_dir . $config_name . '.yml';
-    foreach ($params as $param) {
-      $config_updater->update($config, $config_name, $param);
-    }
-  }
-}
+  _openy_map_absolutize_config_icon_urls();
 }
