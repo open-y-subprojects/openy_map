@@ -319,13 +319,14 @@
           }
 
           for (var j = 0; j < loc.tags.length; j++) {
-            var tag = loc.tags[j];
+            var tag = loc.tags[j].replace(/[^\w\s]/gi, '');
             if (!( tag in this.tags )) {
               this.tags[tag] = {'marker_icons': []};
             }
             if (loc.icon && $.inArray(loc.icon, this.tags[tag].marker_icons) == -1) {
               this.tags[tag].marker_icons.push(loc.icon);
             }
+            this.tags[tag].name = loc.tags[j];
           }
         }
       },
@@ -555,7 +556,7 @@
             if ($.inArray(tag, this.initial_active_tags) >= 0) {
               filter_checked = 'selected';
             }
-            tag_filters_html += '<option value="' + tag + '" ' + filter_checked + '>' + tag + '</option>';
+            tag_filters_html += '<option value="' + tag + '" ' + filter_checked + '>' + this.tags[tag].name + '</option>';
           }, this);
           tag_filters_html += '</select>';
         }
@@ -567,7 +568,7 @@
               filter_checked = 'checked="checked"';
             }
             var tag_filter_html = '<label class="btn btn-default" for="tag_' + tag + '">';
-            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
+            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + this.tags[tag].name;
             for (var i = 0; i < this.tags[tag].marker_icons.length; i++) {
               tag_filter_html += '<img class="tag_icon inline-hidden-sm" src="' + this.tags[tag].marker_icons[i] + '" aria-hidden="true" />';
             }
@@ -1112,13 +1113,14 @@
           }
 
           for (var j = 0; j < loc.tags.length; j++) {
-            var tag = loc.tags[j];
+            var tag = loc.tags[j].replace(/[^\w\s]/gi, '');
             if (!( tag in this.tags )) {
               this.tags[tag] = {'marker_icons': []};
             }
             if (loc.icon && $.inArray(loc.icon, this.tags[tag].marker_icons) == -1) {
               this.tags[tag].marker_icons.push(loc.icon);
             }
+            this.tags[tag].name = loc.tags[j];
           }
         }
       },
@@ -1367,7 +1369,7 @@
             if ($.inArray(tag, this.initial_active_tags) >= 0) {
               filter_checked = 'selected';
             }
-            tag_filters_html += '<option value="' + tag + '" ' + filter_checked + '>' + tag + '</option>';
+            tag_filters_html += '<option value="' + tag + '" ' + filter_checked + '>' + this.tags[tag].name + '</option>';
           }, this);
           tag_filters_html += '</select>';
         }
@@ -1379,7 +1381,7 @@
               filter_checked = 'checked="checked"';
             }
             var tag_filter_html = '<label class="btn btn-default" for="tag_' + tag + '">';
-            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
+            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + this.tags[tag].name;
             for (var i = 0; i < this.tags[tag].marker_icons.length; i++) {
               tag_filter_html += '<img class="tag_icon inline-hidden-sm" src="' + this.tags[tag].marker_icons[i] + '" aria-hidden="true" />';
             }
