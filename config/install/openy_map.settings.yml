@@ -6,6 +6,10 @@ leaflet:
   base_layer_override:
     enable: 0
     pattern: ''
+  clustering:
+    enable: 0
+    cluster_settings: {}
+    disable_clustering_at_zoom: ''
   location: 'United States of America'
 default_tags:
   branch: YMCA
