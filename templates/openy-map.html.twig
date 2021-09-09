@@ -23,12 +23,13 @@
                   <div class="form-group">
                     <label class="sr-only">{{ 'Distance'|t }}</label>
                     <select class="distance_limit_value distance_limit form-control form-select">
-                      <option class="all_locations" value="">{{ 'All locations'|t }}</option>
-                      <option value="5">{{ '5 miles'|t }}</option>
-                      <option value="10" selected>{{ '10 miles'|t }}</option>
-                      <option value="30">{{ '30 miles'|t }}</option>
-                      <option value="50">{{ '50 miles'|t }}</option>
-                      <option value="100">{{ '100 miles'|t }}</option>
+                      <option class="all_locations" value="all_locations">{{ 'All locations' | t }}</option>
+                      {% for option in element['#options'] %}
+                        <option value="{{ option.value }}"
+                          {{ option.selected }}>
+                          {{ option.label }}
+                        </option>
+                      {% endfor %}
                     </select>
                   </div>
                 </div>
