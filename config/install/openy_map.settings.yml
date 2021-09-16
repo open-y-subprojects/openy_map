@@ -1,4 +1,5 @@
 map_engine: leaflet
+distance_limit_units: ml
 leaflet:
   base_layer: OpenStreetMap.Mapnik
   search_icon: 'modules/contrib/openy_map/img/other/map_icon_red.png'

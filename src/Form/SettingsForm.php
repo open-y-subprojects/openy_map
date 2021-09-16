@@ -120,6 +120,19 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => _openy_map_get_default_location(),
     ];
 
+    $form['distance_limit_units_title'] = [
+      '#markup' => '<h2>' . $this->t('Distance limit units') . '</h2>',
+    ];
+    $form['distance_limit_units'] = [
+      '#type' => 'radios',
+      '#options' => [
+        'ml' => $this->t('Miles'),
+        'km' => $this->t('Kilometers'),
+      ],
+      '#default_value' => !empty($config->get('distance_limit_units')) ? $config->get('distance_limit_units') : 'ml',
+      '#required' => TRUE,
+    ];
+
     $options = [
       'Wikimedia' => [
         'name' => 'Wikimedia',
@@ -336,6 +349,7 @@ class SettingsForm extends ConfigFormBase {
     }
 
     $config->set('map_engine', $form_state->getValue('map_engine'));
+    $config->set('distance_limit_units', $form_state->getValue('distance_limit_units'));
     $config->set('leaflet.location', $form_state->getValue('leaflet')['location']);
     $config->set('leaflet.base_layer', $form_state->getValue('leaflet')['base_layer']);
     $config->set('leaflet.base_layer_override', $form_state->getValue('leaflet')['base_layer_override']);

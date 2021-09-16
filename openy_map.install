@@ -133,3 +133,13 @@ function openy_map_update_8006() {
 function openy_map_update_8007() {
   _openy_map_absolutize_config_icon_urls();
 }
+
+/**
+ * Update distance limit units.
+ */
+function openy_map_update_8008() {
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('openy_map.settings')
+    ->set('distance_limit_units', 'ml')
+    ->save(TRUE);
+}

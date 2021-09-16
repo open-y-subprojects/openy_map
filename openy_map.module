@@ -14,6 +14,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 function openy_map_theme() {
   $items = [
     'openy_map' => [
+      '#options' => [],
       'render element' => 'element',
     ],
   ];
