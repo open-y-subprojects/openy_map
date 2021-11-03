@@ -5,7 +5,7 @@
   "main": "map.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode=production",
-    "dev": "webpack --config webpack.config.js --mode=development"
+    "dev": "webpack --config webpack.config.js --mode=development --watch"
   },
   "author": "Open Y",
   "license": "GPL-3.0",
