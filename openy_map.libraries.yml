@@ -1,4 +1,5 @@
 openy_map:
+  version: 1.0
   js:
     js/map.js: {}
     js/jquery.multiselect.js: {}
