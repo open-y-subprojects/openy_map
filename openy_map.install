@@ -22,17 +22,21 @@ function _openy_map_absolutize_config_icon_urls() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('openy_map.settings');
   $icons_config = $config->get('type_icons');
+  // @todo Should these be un-absoluted too?
   foreach ($icons_config as &$url) {
     $absolute_path = file_create_url(ltrim($url, '/'));
     if ($absolute_path != $url) {
       $url = $absolute_path;
     }
   }
-  $search_icon = file_create_url('modules/contrib/openy_map/img/other/map_icon_red.png');
-  $search_icon_retina = file_create_url('modules/contrib/openy_map/img/other/map_icon_red_x2.png');
-  $branch_icon = file_create_url('modules/contrib/openy_map/img/map_icon_blue.png');
-  $camp_icon = file_create_url('modules/contrib/openy_map/img/map_icon_green.png');
-  $facility_icon = file_create_url('modules/contrib/openy_map/img/map_icon_green.png');
+  // These should match the relative path in src/Form/SettingsForm.php.
+  $module_path = drupal_get_path('module', 'openy_map');
+  $search_icon = $module_path . '/img/other/map_icon_red.png';
+  $search_icon_retina = $module_path . '/img/other/map_icon_red_x2.png';
+  $branch_icon = $module_path . '/img/map_icon_blue.png';
+  $camp_icon = $module_path . '/img/map_icon_green.png';
+  $facility_icon = $module_path . '/img/map_icon_green.png';
+  // @todo Ensure we're not overwriting if these are already set.
   $config->set('type_icons', $icons_config)
     ->set('leaflet.search_icon', $search_icon)
     ->set('leaflet.search_icon_retina', $search_icon_retina)
@@ -126,7 +130,7 @@ function openy_map_update_8006() {
     ->save(TRUE);
   }
 }
-  
+
  /**
  * Update path to icons.
  */
@@ -142,4 +146,11 @@ function openy_map_update_8008() {
   $config_factory->getEditable('openy_map.settings')
     ->set('distance_limit_units', 'ml')
     ->save(TRUE);
+}
+
+ /**
+ * Update path to icons.
+ */
+function openy_map_update_8009() {
+  _openy_map_absolutize_config_icon_urls();
 }
