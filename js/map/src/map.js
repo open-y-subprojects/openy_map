@@ -927,7 +927,7 @@
 
       init_map_center: function () {
         var icon = L.icon({
-          iconUrl: this.search_icon,
+          iconUrl: drupalSettings.path.baseUrl + this.search_icon,
           iconRetinaUrl: this.search_icon_retina,
           shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
           iconSize: [25, 41],
@@ -1526,10 +1526,8 @@
           var loc = locations[i];
           loc.point = L.latLng(loc.lat, loc.lng);
           var html = '<div class="marker_tooltip">' + this.draw_map_location(loc) + '</div>';
-          var pathname = window.location.origin;
-
           var icon_options = {
-            iconUrl: loc.icon,
+            iconUrl: drupalSettings.path.baseUrl + loc.icon,
             iconSize: [32, 42],
             iconAnchor: [16, 38],
             popupAnchor: [0, -36]
