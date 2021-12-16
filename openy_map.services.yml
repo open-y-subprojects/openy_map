@@ -4,3 +4,14 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@entity_field.manager'
+  openy_map_data_wrapper:
+    class: Drupal\openy_map\OpenyMapDataWrapper
+    arguments:
+      - '@renderer'
+      - '@entity_type.manager'
+      - '@socrates'
+      - '@cache.data'
+      - '@logger.channel.openy_data_wrapper'
+      - '@config.factory'
+    tags:
+      - { name: "openy_data_service", priority: 120 }
