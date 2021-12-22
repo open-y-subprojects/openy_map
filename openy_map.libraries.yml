@@ -35,7 +35,7 @@ leaflet.markercluster:
     gpl-compatible: true
   css:
     component:
-      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css': { type: external, minified: true }
-      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css': { type: external, minified: true }
+      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css': { type: external }
+      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css': { type: external }
   js:
-    'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js': { type: external, minified: true }
+    'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js': { type: external, minified: true }
