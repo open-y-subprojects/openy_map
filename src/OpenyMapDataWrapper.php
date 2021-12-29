@@ -49,7 +49,7 @@ class OpenyMapDataWrapper extends DataWrapper {
         '/' . drupal_get_path('module', 'openy_map') . "/img/map_icon_green.png";
       $pins[] = [
         'icon' => $uri,
-        'location_id' => $location->id(),
+        'location_id' => (int) $location->id(),
         'tags' => [$tag],
         'lat' => round($coordinates[0]['lat'], 5),
         'lng' => round($coordinates[0]['lng'], 5),
