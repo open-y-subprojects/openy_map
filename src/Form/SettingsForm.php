@@ -215,7 +215,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'checkboxes',
       '#options' => $options,
       '#title' => $this->t('Marker Cluster default settings'),
-      '#default_value' => array_keys(array_filter($clustering_settings['cluster_settings'])),
+      '#default_value' => array_keys(array_filter($clustering_settings['cluster_settings'] ?? [])),
       '#states' => [
         'visible' => $visible,
       ],
