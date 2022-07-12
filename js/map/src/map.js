@@ -4,7 +4,12 @@
 (function ($, window, Drupal, drupalSettings) {
 
   "use strict";
+  var inputs = document.getElementsByTagName("tag_Camp");
+  var elements = document.getElementsByClassName('sidebar-promos');
 
+  if (inputs.checked) {
+    elements.addClass('hide');
+  }
   Drupal.openyMap = function () {
     return {
       // Array of location data.
@@ -26,7 +31,7 @@
       // Marker designating the center point.
       search_center_marker: null,
       // Geocoder.
-      geocoder: function() {
+      geocoder: function () {
         return typeof google.maps !== 'undefined' ? new google.maps.Geocoder() : {};
       },
 
@@ -89,14 +94,14 @@
           $('.with-geo').remove();
         }
         this.component_el.find('.zip-code .btn-submit')
-        .on('click', $.proxy(this.apply_search, this));
+          .on('click', $.proxy(this.apply_search, this));
 
         this.search_field_el.on('keypress', function (e) {
           if (e.keyCode == 13) component.apply_search();
         });
         if (mapLocation) {
           $('.search_field')
-          .val(mapLocation[1].replace(/\+/g, ' '));
+            .val(mapLocation[1].replace(/\+/g, ' '));
 
           $('.distance_limit option').eq(2).attr('selected', true);
           $('.zip-code .btn-submit').click();
@@ -120,9 +125,9 @@
 
       init_map_center: function () {
         this.search_center_marker = this.search_center_marker || new google.maps.Marker({
-            position: this.center_point,
-            animation: google.maps.Animation.DROP
-          });
+          position: this.center_point,
+          animation: google.maps.Animation.DROP
+        });
 
         if (this.search_center_marker) {
           this.search_center_marker.setVisible(false);
@@ -289,8 +294,8 @@
         if (position.coords.accuracy <= 15840) { // 3 miles.
 
           this.geocoder().geocode({
-              'latLng': this.search_center_point
-            },
+            'latLng': this.search_center_point
+          },
             $.proxy(
               function (results, status) {
                 if (results[0]) this.search_field_el.val(results[0].formatted_address);
@@ -314,14 +319,14 @@
           }
 
           // Convert single-string tags to array.
-          if (typeof(loc.tags) === typeof( "" )) {
+          if (typeof (loc.tags) === typeof ("")) {
             loc.tags = [loc.tags];
           }
 
           for (var j = 0; j < loc.tags.length; j++) {
             var tag = loc.tags[j];
-            if (!( tag in this.tags )) {
-              this.tags[tag] = {'marker_icons': []};
+            if (!(tag in this.tags)) {
+              this.tags[tag] = { 'marker_icons': [] };
             }
             if (loc.icon && $.inArray(loc.icon, this.tags[tag].marker_icons) == -1) {
               this.tags[tag].marker_icons.push(loc.icon);
@@ -355,8 +360,8 @@
         };
 
         $('#views-exposed-form-location-by-amenities-block-1')
-        .find('input[type=checkbox]:checked')
-        .each(f);
+          .find('input[type=checkbox]:checked')
+          .each(f);
       },
 
       // Applies tag and distance filters to a list of locations,
@@ -471,7 +476,7 @@
         var url_parameters = this.get_parameters();
         var tag_filter_url_value = url_parameters.type;
 
-        var tag_filter_url_values = ( tag_filter_url_value ) ? tag_filter_url_value.split(",") : [];
+        var tag_filter_url_values = (tag_filter_url_value) ? tag_filter_url_value.split(",") : [];
 
         for (var tag in this.tags) {
           if (tag_filter_url_values.length === 0) {
@@ -567,7 +572,7 @@
               filter_checked = 'checked="checked"';
             }
             var tag_filter_html = '<label class="btn btn-default" for="tag_' + tag + '">';
-            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag.replace(/[^\w,_]/gi, '') + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
+            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
             for (var i = 0; i < this.tags[tag].marker_icons.length; i++) {
               tag_filter_html += '<img class="tag_icon inline-hidden-sm" src="' + this.tags[tag].marker_icons[i] + '" aria-hidden="true" />';
             }
@@ -575,7 +580,6 @@
             tag_filters_html += tag_filter_html;
           }
         }
-
         this.map_controls_el.find('.tag_filters').append(tag_filters_html);
 
         if (this.tags_style == 'list-checkboxes') {
@@ -606,9 +610,9 @@
       // replace spaces with dashes.
       encode_to_url_format: function (txt) {
         return txt
-        .toLowerCase()
-        .replace(/[^\w ]+/g, '')
-        .replace(/ +/g, '-')
+          .toLowerCase()
+          .replace(/[^\w ]+/g, '')
+          .replace(/ +/g, '-')
           ;
       },
 
@@ -894,20 +898,20 @@
 
 
         var mapLocation = document.location.href.match(/&?[amp;]?map_location=([\w|\+]*)&?[amp;]?/),
-            component = this;
+          component = this;
 
         if (!navigator.geolocation) {
           $('.with-geo').remove();
         }
         this.component_el.find('.zip-code .btn-submit')
-            .on('click', $.proxy(this.apply_search, this));
+          .on('click', $.proxy(this.apply_search, this));
 
         this.search_field_el.on('keypress', function (e) {
           if (e.keyCode == 13) component.apply_search();
         });
         if (mapLocation) {
           $('.search_field')
-              .val(mapLocation[1].replace(/\+/g, ' '));
+            .val(mapLocation[1].replace(/\+/g, ' '));
 
           $('.distance_limit option').eq(2).attr('selected', true);
           $('.zip-code .btn-submit').click();
@@ -919,15 +923,16 @@
         this.map = L.map(this.map_el[0]).setView([51.505, -0.09], 13);
         L.tileLayer(this.baseLayer.tilePattern, this.baseLayer.options).addTo(this.map);
         this.map.scrollWheelZoom.disable();
-        if(L.Browser.mobile) {
+        if (L.Browser.mobile) {
           this.map.dragging.disable();
         }
         this.init_map_center();
       },
 
       init_map_center: function () {
+        var pathname = window.location.origin;
         var icon = L.icon({
-          iconUrl: drupalSettings.path.baseUrl + this.search_icon,
+          iconUrl: pathname + '/' + this.search_icon,
           iconRetinaUrl: this.search_icon_retina,
           shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
           iconSize: [25, 41],
@@ -935,7 +940,7 @@
           popupAnchor: [1, -34],
           shadowSize: [41, 41]
         });
-        this.search_center_marker = this.search_center_marker || L.marker(this.map.getCenter(), {icon: icon});
+        this.search_center_marker = this.search_center_marker || L.marker(this.map.getCenter(), { icon: icon });
 
         if (this.search_center_marker) {
           this.search_center_marker.removeFrom(this.map);
@@ -979,7 +984,7 @@
           return;
         }
 
-        this.geocode(q, function(data, status) {
+        this.geocode(q, function (data, status) {
           if (status == 'success' && data.length > 0) {
             self.search_center_point = L.latLng(data[0].lat, data[0].lon);
 
@@ -997,7 +1002,7 @@
         });
       },
 
-      geocode: function(query, callback) {
+      geocode: function (query, callback) {
         var base = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=';
         var suffix = this.default_search_location ? '+' + this.default_search_location : '';
         $.getJSON(base + query + suffix, callback);
@@ -1036,8 +1041,8 @@
 
         if (!locations.length) {
           var message_html = '<div class="col-xs-12 text-center"><p>' +
-              Drupal.t("We're sorry no results were found in your area") +
-              '</p></div>';
+            Drupal.t("We're sorry no results were found in your area") +
+            '</p></div>';
           this.messages_el.hide().html(message_html).fadeIn();
           return;
         }
@@ -1111,14 +1116,14 @@
           }
 
           // Convert single-string tags to array.
-          if (typeof(loc.tags) === typeof( "" )) {
+          if (typeof (loc.tags) === typeof ("")) {
             loc.tags = [loc.tags];
           }
 
           for (var j = 0; j < loc.tags.length; j++) {
             var tag = loc.tags[j];
-            if (!( tag in this.tags )) {
-              this.tags[tag] = {'marker_icons': []};
+            if (!(tag in this.tags)) {
+              this.tags[tag] = { 'marker_icons': [] };
             }
             if (loc.icon && $.inArray(loc.icon, this.tags[tag].marker_icons) == -1) {
               this.tags[tag].marker_icons.push(loc.icon);
@@ -1151,8 +1156,8 @@
         };
 
         $('#views-exposed-form-location-by-amenities-block-1')
-            .find('input[type=checkbox]:checked')
-            .each(f);
+          .find('input[type=checkbox]:checked')
+          .each(f);
       },
 
       // Applies tag and distance filters to a list of locations,
@@ -1214,8 +1219,8 @@
         for (var i = 0; i < locations.length; i++) {
           var loc = locations[i];
           var R = 3963,
-              lat2 = parseFloat(loc.point.lat),
-              lon2 = parseFloat(loc.point.lng);
+            lat2 = parseFloat(loc.point.lat),
+            lon2 = parseFloat(loc.point.lng);
 
           var rlat = this.toRad(lat2 - lat1);
           var rlon = this.toRad(lon2 - lon1);
@@ -1245,7 +1250,7 @@
         var filtered_locations = [];
         for (var i = 0; i < locations.length; i++) {
           var loc = locations[i],
-              matched_amenities = 0;
+            matched_amenities = 0;
           for (var j = 0; j < this.amenities_filters.length; j++) {
             var amenities_filter = this.amenities_filters[j];
             if ($.inArray(amenities_filter, loc.amenities) >= 0) {
@@ -1272,7 +1277,7 @@
         var url_parameters = this.get_parameters();
         var tag_filter_url_value = url_parameters.type;
 
-        var tag_filter_url_values = ( tag_filter_url_value ) ? tag_filter_url_value.split(",") : [];
+        var tag_filter_url_values = (tag_filter_url_value) ? tag_filter_url_value.split(",") : [];
 
         for (var tag in this.tags) {
           if (tag_filter_url_values.length === 0) {
@@ -1306,18 +1311,18 @@
       // Update url params.
       set_url_parameters: function () {
         var url = document.location.pathname,
-            params = this.get_parameters(),
-            filterTagsRaw = this.tag_filters,
-            filteramenitiesRaw = this.amenities_filters,
-            filterTags = '',
-            filteramenities = '',
-            utmListRaw = {},
-            utms = '',
-            mapLocation = $('.search_field').val() || (params.hasOwnProperty('map_location') && params.map_location) || '';
+          params = this.get_parameters(),
+          filterTagsRaw = this.tag_filters,
+          filteramenitiesRaw = this.amenities_filters,
+          filterTags = '',
+          filteramenities = '',
+          utmListRaw = {},
+          utms = '',
+          mapLocation = $('.search_field').val() || (params.hasOwnProperty('map_location') && params.map_location) || '';
 
         for (let [key, value] of Object.entries(params)) {
           var prmsKey = key.split("_");
-          if (prmsKey[0] === 'utm'){
+          if (prmsKey[0] === 'utm') {
             utmListRaw[key] = value;
           }
         }
@@ -1383,7 +1388,7 @@
               filter_checked = 'checked="checked"';
             }
             var tag_filter_html = '<label class="btn btn-default" for="tag_' + tag + '">';
-            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag.replace(/[^\w,_]/gi, '') + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
+            tag_filter_html += '<input autocomplete="off" id="tag_' + tag + '" class="tag_' + tag + '" type="checkbox" value="' + tag + '" ' + filter_checked + '/>' + tag;
             for (var i = 0; i < this.tags[tag].marker_icons.length; i++) {
               tag_filter_html += '<img class="tag_icon inline-hidden-sm" src="' + this.tags[tag].marker_icons[i] + '" aria-hidden="true" />';
             }
@@ -1422,9 +1427,9 @@
       // replace spaces with dashes.
       encode_to_url_format: function (txt) {
         return txt
-            .toLowerCase()
-            .replace(/[^\w ]+/g, '')
-            .replace(/ +/g, '-');
+          .toLowerCase()
+          .replace(/[^\w ]+/g, '')
+          .replace(/ +/g, '-');
       },
 
       // Update locations on the map by setting their visibility
@@ -1452,6 +1457,9 @@
           }
           else {
             loc.marker.addTo(this.map);
+          }
+          if (loc.name == "Rochester YMCA") {
+            loc.marker.removeFrom(this.map);
           }
         }
 
@@ -1490,8 +1498,8 @@
 
         if (!locations.length) {
           var message_html = '<div class="col-xs-12 text-center"><p>' +
-              Drupal.t('No locations were found in this area. Please try a different area or increase your search distance.') +
-              '</p></div>';
+            Drupal.t('No locations were found in this area. Please try a different area or increase your search distance.') +
+            '</p></div>';
           this.messages_el.hide().html(message_html).fadeIn();
           return;
         }
@@ -1526,8 +1534,10 @@
           var loc = locations[i];
           loc.point = L.latLng(loc.lat, loc.lng);
           var html = '<div class="marker_tooltip">' + this.draw_map_location(loc) + '</div>';
+          var pathname = window.location.origin;
+
           var icon_options = {
-            iconUrl: drupalSettings.path.baseUrl + loc.icon,
+            iconUrl: pathname + '/' + loc.icon,
             iconSize: [32, 42],
             iconAnchor: [16, 38],
             popupAnchor: [0, -36]
@@ -1649,19 +1659,17 @@
       $('.locations-list .node--view-mode-teaser').each(function () {
         var $self = $(this);
         for (var i = 0; i < data.length; i++) {
-          if (
-            typeof (data[i]) !== 'undefined' &&
-            $self.data("openy-map-location-id") === data[i].location_id
-          ) {
-            data[i].element = {};
-            data[i].element = $self.parent();
-            data[i].amenities = [];
-            if (typeof ($self.data('amenities')) !== 'undefined') {
+          if (typeof (data[i]) !== 'undefined' && $self.find('.location-item--title')[0].innerText !== 'undefined') {
+            if ($.trim($self.find('.location-item--title')[0].innerText).toLowerCase() == $.trim(data[i].name).toLocaleLowerCase()) {
+              data[i].element = {};
+              data[i].element = $self.parent();
+              data[i].amenities = [];
               data[i].amenities = ($self.data('amenities'));
             }
           }
         }
       });
+
 
       $('.openy-map-canvas', context).once().each(function () {
         var $canvas = $(this);
