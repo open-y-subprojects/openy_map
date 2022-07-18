@@ -229,7 +229,7 @@ class SettingsForm extends ConfigFormBase {
       '#size' => 2,
       '#title' => $this->t('Disable clustering at zoom'),
       '#description' => $this->t('If set, at this zoom level and below, markers will not be clustered.'),
-      '#default_value' => $clustering_settings['disable_clustering_at_zoom'],
+      '#default_value' => $clustering_settings['disable_clustering_at_zoom'] ?? [],
       '#states' => [
         'visible' => $visible,
       ],
