@@ -1660,7 +1660,7 @@
         var $self = $(this);
         for (var i = 0; i < data.length; i++) {
           if (typeof (data[i]) !== 'undefined' && $self.find('.location-item--title')[0].innerText !== 'undefined') {
-            if ($.trim($self.parent().children().attr('data-history-node-id')) == $.trim(data[i].location_id)) {
+            if ($.trim($self.parent().children().attr('data-openy-map-location-id')) == $.trim(data[i].location_id)) {
               data[i].element = {};
               data[i].element = $self.parent();
               data[i].amenities = [];
