@@ -2,17 +2,24 @@ openy_map:
   version: 1.0
   js:
     js/map.js: {}
-    js/jquery.multiselect.js: {}
   css:
     component:
       css/map.css: {}
-      css/jquery.multiselect.css: {}
   dependencies:
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.autocomplete
     - core/drupal
     - core/drupalSettings
+    - openy_map/jquery.multiselect
+
+jquery.multiselect:
+  version: 1.0
+  js:
+    js/jquery.multiselect.js: {}
+  css:
+    component:
+      css/jquery.multiselect.css: {}
 
 gmaps:
   js:
