@@ -30,7 +30,7 @@ function _openy_map_absolutize_config_icon_urls() {
     }
   }
   // These should match the relative path in src/Form/SettingsForm.php.
-  $module_path = drupal_get_path('module', 'openy_map');
+  $module_path = \Drupal::service('extension.list.module')->getPath('openy_map');
   $search_icon = $module_path . '/img/other/map_icon_red.png';
   $search_icon_retina = $module_path . '/img/other/map_icon_red_x2.png';
   $branch_icon = $module_path . '/img/map_icon_blue.png';
@@ -68,7 +68,7 @@ function _openy_map_set_default_location() {
  */
 function openy_map_update_8001() {
   $cim = \Drupal::service('config_import.importer');
-  $cim->setDirectory(drupal_get_path('module', 'openy_map') . '/config/install');
+  $cim->setDirectory(\Drupal::service('extension.list.module')->getPath('openy_map') . '/config/install');
   $cim->importConfigs(['openy_map.settings']);
 }
 
@@ -90,7 +90,7 @@ function openy_map_update_8002() {
  * Remove obsolete displays in locations view.
  */
 function openy_map_update_8003() {
-  $config_dir = drupal_get_path('module', 'openy_map') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_map') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'views.view.locations' => [
@@ -112,7 +112,7 @@ function openy_map_update_8003() {
  */
 function openy_map_update_8004() {
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_map') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_map') . '/config/install/';
   $config_name = 'openy_map.settings';
   $config_path = $config_dir . $config_name . '.yml';
   $config_updater->update($config_path, $config_name, 'leaflet.base_layer_override');
