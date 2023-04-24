@@ -266,7 +266,7 @@ class SettingsForm extends ConfigFormBase {
           if (is_dir($relative_path)) {
             continue;
           }
-          $path = file_create_url($relative_path);
+          $path = \Drupal::service('file_url_generator')->generateAbsoluteString($relative_path);
           $fileOptions[$relative_path] = '<img src="' . $path . '" />';
         }
       }
@@ -274,7 +274,7 @@ class SettingsForm extends ConfigFormBase {
       foreach (scandir($openYMapPath) as $imgFile) {
         $relative_path = $openYMapPath . '/' . $imgFile;
         if (!in_array($imgFile, $themeFiles) && !is_dir($relative_path)) {
-          $path = file_create_url($relative_path);
+          $path = \Drupal::service('file_url_generator')->generateAbsoluteString($relative_path);
           $fileOptions[$relative_path] = '<img src="' . $path . '" />';
         }
       }
