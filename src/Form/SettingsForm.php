@@ -257,7 +257,7 @@ class SettingsForm extends ConfigFormBase {
     if (!empty($nodeTypes)) {
       // Render icon files from Location Finder module and default theme.
       $themeConfig = $this->config('system.theme');
-      $themePath = drupal_get_path('theme', $themeConfig->get('default')) . '/img/locations_icons';
+      $themePath = \Drupal::service('extension.list.theme')->getPath($themeConfig->get('default')) . '/img/locations_icons';
       $fileOptions = $themeFiles = [];
       if (is_dir($themePath)) {
         $themeFiles = scandir($themePath);
@@ -270,7 +270,7 @@ class SettingsForm extends ConfigFormBase {
           $fileOptions[$relative_path] = '<img src="' . $path . '" />';
         }
       }
-      $openYMapPath = drupal_get_path('module', 'openy_map') . '/img';
+      $openYMapPath = \Drupal::service('extension.list.module')->getPath('openy_map') . '/img';
       foreach (scandir($openYMapPath) as $imgFile) {
         $relative_path = $openYMapPath . '/' . $imgFile;
         if (!in_array($imgFile, $themeFiles) && !is_dir($relative_path)) {

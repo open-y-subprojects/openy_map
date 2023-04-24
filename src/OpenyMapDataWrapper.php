@@ -46,7 +46,7 @@ class OpenyMapDataWrapper extends DataWrapper {
         continue;
       }
       $uri = !empty($typeIcons[$location->bundle()]) ? $typeIcons[$location->bundle()] :
-        '/' . drupal_get_path('module', 'openy_map') . "/img/map_icon_green.png";
+        '/' . \Drupal::service('extension.list.module')->getPath('openy_map') . "/img/map_icon_green.png";
       $pins[] = [
         'icon' => $uri,
         'location_id' => (int) $location->id(),
