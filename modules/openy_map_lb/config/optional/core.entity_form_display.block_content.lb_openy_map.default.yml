@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.lb_openy_map
+id: block_content.lb_openy_map.default
+targetEntityType: block_content
+bundle: lb_openy_map
+mode: default
+content: {  }
+hidden:
+  info: true
+  langcode: true

@@ -1,0 +1,39 @@
+{
+  "name": "map.js",
+  "version": "1.0.0",
+  "description": "Open Y LB map library",
+  "main": "map.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --mode=production",
+    "dev": "webpack --config webpack.config.js --mode=development --watch",
+    "css:compile": "node-sass --include-path node_modules/bootstrap/scss --importer node_modules/node-sass-magic-importer/dist/cli.js ./scss/openy-map-lb.scss -o ../css",
+    "css:prefix": "postcss --use autoprefixer -b '> 10%' ../css/*.css -r",
+    "css:build": "npm run css:compile && npm run css:prefix",
+    "css:watch": "nodemon -e scss -x \"npm run css:build\""
+  },
+  "author": "Open Y",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@vue/babel-preset-app": "^3.11.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "bootstrap": "^4.4.1",
+    "breakpoint-sass": "^2.7.1",
+    "autoprefixer": "^10.4.13",
+    "node-sass": "^7.0.3",
+    "node-sass-magic-importer": "^5.3.2",
+    "nodemon": "^2.0.20",
+    "postcss-cli": "^10.0.0"
+  },
+  "engines": {
+    "npm": "~8",
+    "node": "~16"
+  }
+}
