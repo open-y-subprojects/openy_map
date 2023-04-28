@@ -586,7 +586,7 @@
           const [key, val] = param.split("=");
           hash[key] = (typeof val === 'string') ? val.includes(',') ? val.split(',') : [val] : [];
         });
-        return (param && typeof hash[param] !== 'undefined') ? hash[param] : hash;
+        return (param) ? (typeof hash[param] !== 'undefined') ? hash[param] : [] : params;
       },
       // Update url params.
       set_url_parameters: function () {
