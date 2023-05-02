@@ -1,0 +1,75 @@
+<div class="openy-map-wrapper container-fluid">
+  {% if element['#show_controls'] %}
+  <div class="row position-relative">
+    <div class="map_controls col-lg-12">
+      <div class="form form__locations__lb position-relative" role="form">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-lg-9 zip-code filter-item mb-md-0 mb-4">
+              <div class="form-group">
+                <label for="search_field">{{ 'ENTER ZIP CODE or address'|t }}</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search by location" id="search_field" />
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" aria-label="{{ "Search"|t }}"><i class="fas fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 distance filter-item">
+              <div class="form-group">
+                <label for="distance_limit">{{ 'Distance'|t }}</label>
+                <select class="distance_limit_value distance_limit form-control form-select" id="distance_limit">
+                  <option class="all_locations" value="all_locations" selected="selected">{{ 'Any distance' | t }}</option>
+                  {% for option in element['#options'] %}
+                    <option value="{{ option.value }}"
+                            {{ option.selected }}>
+                      {{ option.label }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="d-none d-md-block">
+        <div class="container tags-and-amenities">
+          <div class="row">
+            <div class="col-md-8 col-lg-8 filter-item tags-filters-col">
+              <div class="tag_filters form-group"></div>
+            </div>
+            <div class="col-md-4 col-lg-4 filter-item text-center text-md-right mb-2">
+              <a class="btn btn-outline-light amenities-filter-control collapsed" data-toggle="collapse" href="#amenities-filter" role="button" aria-expanded="false" aria-controls="amenities-filter" >
+                {{ 'Filter by amenities' }} <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% if element['#amenities'] is not empty %}
+          <div class="position-absolute amenities-filter collapse" id="amenities-filter">
+            <div class="container">
+              <div class="row">
+                {% for group_term_id, group in element['#amenities'] %}
+                  <div class="col-md-2 col-lg-2 amenities-group" data-total="{{ group['items']|length }}">
+                    <div class="d-none d-md-block"><strong>{{ group['group_name'] }}</strong></div>
+                    <header class="d-block d-md-none" data-toggle="collapse" href="#group-{{ group['group_name']|clean_id }}" role="button" aria-expanded="false" aria-controls="group-{{ group['group_name']|clean_id }}"><strong>{{ group['group_name'] }}</strong><i class="fas fa-plus"></i></header>
+                    <ul class="collapse d-md-block" id="group-{{ group['group_name']|clean_id }}">
+                      {% for item_id, item_label in group['items'] %}
+                        <li><label><input type="checkbox" name="field_location_amenities_target_id[{{ item_id }}]" value="{{ item_id }}">{{ item_label }}</label></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="messages col-12 pb-5"></div>
+  </div>
+  <div class="row openy-map-canvas openy-map map"></div>
+</div>

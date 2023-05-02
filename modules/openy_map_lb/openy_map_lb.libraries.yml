@@ -1,0 +1,14 @@
+openy_map:
+  version: 1.0
+  js:
+    assets/js/map.js: { preprocess: true }
+  css:
+    component:
+      assets/css/openy-map-lb.css: { preprocess: true }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/jquery.ui.autocomplete
+    - core/drupal
+    - core/drupalSettings
+    - openy_map/jquery.multiselect

@@ -1,0 +1,75 @@
+<?php
+/**
+ * @file
+ * Module file.
+ */
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function openy_map_lb_theme($existing, $type, $theme, $path) {
+  return [
+    'block__lb_openy_map' => [
+      'base hook' => 'block',
+      'template' => 'block--lb-openy-map',
+    ],
+    'openy_map_lb' => [
+      '#options' => [],
+      'render element' => 'element',
+    ],
+    'views_view__locations_lb' => [
+      'base hook' => 'view'
+    ],
+    'node__location_type__lb_teaser' => [
+      'base hook' => 'node'
+    ]
+  ];
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function openy_map_lb_preprocess_block__lb_openy_map(&$variables) {
+  if ($variables['in_preview']) {
+    return [];
+  }
+  $block_manager = \Drupal::service('plugin.manager.block');
+  $config = [];
+  $plugin_block = $block_manager->createInstance('location_finder_lb', $config);
+  // Some blocks might implement access check.
+  $access_result = $plugin_block->access(\Drupal::currentUser());
+  // Return empty render array if user doesn't have access.
+  // $access_result can be boolean or an AccessResult class
+  if (is_object($access_result) && $access_result->isForbidden() || is_bool($access_result) && !$access_result) {
+    // You might need to add some cache tags/contexts.
+    return;
+  }
+  $render = $plugin_block->build();
+  // Add the cache tags/contexts.
+  \Drupal::service('renderer')->addCacheableDependency($render, $plugin_block);
+  $variables['content'] = $render;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function openy_map_lb_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $has_layout =& drupal_static(__FUNCTION__, NULL);
+  /** @var \Drupal\node\Entity\Node $node */
+  $node = $variables['elements']['#node'];
+  $view_mode = $variables['elements']['#view_mode'];
+  // Check for active types.
+  $activeTypes = \Drupal::configFactory()->get('openy_map.settings')->get('active_types');
+  $activeTypes = !empty($activeTypes) ? array_keys(array_filter($activeTypes)) : [];
+  // Add universal template for all location content type teasers.
+  if ($view_mode == 'teaser' && $node->hasField('field_location_coordinates') && in_array($node->bundle(), $activeTypes)) {
+    if (is_null($has_layout)) {
+      $current_page = Drupal::routeMatch()->getParameter('node');
+      $has_layout = ($current_page instanceof NodeInterface) && $current_page->hasField('layout_builder__layout');
+    }
+    if ($has_layout) {
+      $suggestions[] = 'node__location_type__lb_teaser';
+    }
+  }
+}
