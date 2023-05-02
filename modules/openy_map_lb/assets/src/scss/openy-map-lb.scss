@@ -167,6 +167,7 @@
     }
     .views-row {
       .node {
+        font-family: var(--ylb-font-family-cachet);
         border-radius: 8px;
         background-color: #FFFFFF;
         box-shadow: 0 0 11px 0 rgba(0,0,0,0.15);
@@ -180,11 +181,27 @@
             text-transform: uppercase;
             color: #2F2F2F;
             margin-bottom: 20px;
+            font-weight: 600;
             img {
               height: 17.5px;
               margin-right: 10px;
             }
           }
+          .directions {
+            margin-bottom: 20px;
+          }
+          .phone {
+            font-size: 18px;
+            line-height: 28px;
+            letter-spacing: -1px;
+            .field-location-phone {
+              display: inline;
+              a {
+                font-weight: normal;
+              }
+            }
+          }
+          .hours {}
           .field-branch-hours {
             h4 {
               display: none;

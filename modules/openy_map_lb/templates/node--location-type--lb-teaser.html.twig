@@ -100,7 +100,16 @@
         <div class="type">{{ node.bundle }}</div>
 
         <div{{ content_attributes.addClass('node__content') }}>
-            {{ content|without('field_location_area', 'field_location_state') }}
+            {{ content.field_location_address }}
+            {% if content.field_location_directions %}
+                <div class="directions"><a href="{{ content.field_location_directions['#url'] }}">{{ "Get directions"|t }}</a></div>
+            {% endif %}
+            {% if content.field_location_phone %}
+                <div class="phone"><i class="fas fa-phone"></i> {{ "Phone"|t }} {{ content.field_location_phone }}</div>
+            {% endif %}
+            {% if content.field_branch_hours %}
+                <div class="hours"><i class="fas fa-clock"></i> {{ content.field_branch_hours }}</div>
+            {% endif %}
         </div>
     </div>
     {% if node.bundle == 'branch' %}
