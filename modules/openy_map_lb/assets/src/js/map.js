@@ -1,7 +1,7 @@
 /**
  * @file main.js
  */
-(function ($, window, Drupal, drupalSettings) {
+(function ($, window, Drupal, drupalSettings, once) {
   "use strict";
 
   /**
@@ -778,33 +778,38 @@
           break;
       }
 
-      $('.amenities-filter-control', context).once().click(function(){
-        if ($(this).hasClass('collapsed')) {
-          $('i.fas', this).removeClass('fa-plus').addClass('fa-times');
-        }
-        else {
-          $('i.fas', this).removeClass('fa-times').addClass('fa-plus');
-        }
-      })
+      once('amenities-filter-control', '.amenities-filter-control', context)
+        .forEach((control) => {
+          const $control = $(control);
+          $control.click(function(){
+            if ($(this).hasClass('collapsed')) {
+              $('i.fas', this).removeClass('fa-plus').addClass('fa-times');
+            }
+            else {
+              $('i.fas', this).removeClass('fa-times').addClass('fa-plus');
+            }
+          })
+        });
 
-      $('.openy-map-canvas', context).once().each(function () {
-        var $canvas = $(this);
-        var timer = setInterval(function () {
-          if (!map.libraryIsLoaded()) {
-            return;
-          }
+      once('openy-map-canvas', '.openy-map-canvas', context)
+        .forEach((canvas) => {
+          const $canvas = $(canvas);
+          var timer = setInterval(function () {
+            if (!map.libraryIsLoaded()) {
+              return;
+            }
 
-          map.init({
-            component_el: $canvas.closest('.block-openy-map'),
-            map_data: data
-          });
+            map.init({
+              component_el: $canvas.closest('.openy-map-wrapper'),
+              map_data: data,
+            });
 
-          // Reset openyMap data (fix for old pins on new map after ajax call).
-          settings.openyMap = [];
-          clearInterval(timer);
-        }, 100);
-      });
+            // Reset openyMap data (fix for old pins on new map after ajax call).
+            settings.openyMap = [];
+            clearInterval(timer);
+          }, 100);
+        });
     }
   };
 
-})(jQuery, window, Drupal, drupalSettings);
+})(jQuery, window, Drupal, drupalSettings, once);
