@@ -23,6 +23,7 @@ class OpenyMapDataWrapper extends DataWrapper {
         ->getQuery()
         ->condition('type', $type)
         ->condition('status', 1)
+        ->accessCheck(FALSE)
         ->execute();
     }
 
