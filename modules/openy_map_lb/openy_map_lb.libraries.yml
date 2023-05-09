@@ -7,8 +7,8 @@ openy_map:
       assets/css/openy-map-lb.css: { preprocess: true }
   dependencies:
     - core/jquery
-    - core/jquery.once
-    - core/jquery.ui.autocomplete
+    - core/once
+    - jquery_ui_autocomplete/autocomplete
     - core/drupal
     - core/drupalSettings
     - openy_map/jquery.multiselect

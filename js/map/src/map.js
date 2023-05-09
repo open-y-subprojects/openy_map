@@ -1,7 +1,7 @@
 /**
  * @file main.js
  */
-(function ($, window, Drupal, drupalSettings) {
+(function ($, window, Drupal, drupalSettings, once) {
 
   "use strict";
   var inputs = document.getElementsByTagName("tag_Camp");
@@ -1670,27 +1670,26 @@
         }
       });
 
+      once('openy-map-canvas', '.openy-map-canvas', context)
+        .forEach((canvas) => {
+          const $canvas = $(canvas);
+          var timer = setInterval(function () {
+            if (!map.libraryIsLoaded()) {
+              return;
+            }
 
-      $('.openy-map-canvas', context).once().each(function () {
-        var $canvas = $(this);
-        var timer = setInterval(function () {
-          if (!map.libraryIsLoaded()) {
-            return;
-          }
+            map.init({
+              component_el: $canvas.closest('.openy-map-wrapper'),
+              map_data: data,
+              tags_style: $canvas.closest('.location-finder-filters').attr('data-tags-style')
+            });
 
-          map.init({
-            component_el: $canvas.closest('.openy-map-wrapper'),
-            map_data: data,
-            tags_style: $canvas.closest('.location-finder-filters').attr('data-tags-style')
-          });
-
-          // Reset openyMap data (fix for old pins on new map after ajax call).
-          settings.openyMap = [];
-          clearInterval(timer);
-        }, 100);
-      });
-
+            // Reset openyMap data (fix for old pins on new map after ajax call).
+            settings.openyMap = [];
+            clearInterval(timer);
+          }, 100);
+        });
     }
   };
 
-})(jQuery, window, Drupal, drupalSettings);
+})(jQuery, window, Drupal, drupalSettings, once);
