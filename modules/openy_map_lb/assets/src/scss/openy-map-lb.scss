@@ -203,24 +203,37 @@
               margin-right: 10px;
             }
           }
-          .directions {
-            margin-bottom: 20px;
-          }
-          .phone {
-            font-size: 18px;
-            line-height: 28px;
-            letter-spacing: -1px;
-            .field-location-phone {
-              display: inline;
-              a {
-                font-weight: normal;
+          .node__content {
+            a {
+              text-decoration: underline;
+            }
+            address {
+              margin-bottom: 0;
+              .fa-map-marker-alt {
+                display: none;
               }
             }
-          }
-          .hours {}
-          .field-branch-hours {
-            h4 {
-              display: none;
+
+            .directions {
+              margin-bottom: 20px;
+              padding-left: 25px;
+            }
+            .phone {
+              font-size: 18px;
+              line-height: 28px;
+              letter-spacing: -1px;
+              .field-location-phone {
+                display: inline;
+                a {
+                  font-weight: normal;
+                }
+              }
+            }
+            .hours {}
+            .field-branch-hours {
+              h4 {
+                display: none;
+              }
             }
           }
         }
