@@ -223,7 +223,7 @@
             loc.element = element;
             loc.amenities = element.data('amenities').map(el => +el) || [];
             this.state.addAmenities(loc.tag, loc.amenities);
-            $('.type', loc.element).prepend(`<img src='${this.origin}/${loc.icon}' alt="marker icon"/>`);
+            $('.type', loc.element).prepend(`<img src='${this.origin}${loc.icon}' alt="marker icon"/>`);
           }
         });
         // Init active filters from URL.
@@ -832,8 +832,8 @@
           this.map.dragging.disable();
         }
         var icon = L.icon({
-          iconUrl: this.origin + '/' + this.search_icon,
-          iconRetinaUrl: this.search_icon_retina,
+          iconUrl: `${this.origin}${this.search_icon}`,
+          iconRetinaUrl: `${this.origin}${this.search_icon_retina}`,
           shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
           iconSize: [25, 41],
           iconAnchor: [12, 41],
