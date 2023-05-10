@@ -106,6 +106,20 @@
         padding-bottom: 0;
       }
     }
+    .amenities-plain-list {
+      display: table-column;
+      list-style: none;
+      padding: 0;
+      columns: 5;
+      @include media-breakpoint-down('md'){
+        columns: 1;
+      }
+      li {
+        input {
+          margin-right: 5px;
+        }
+      }
+    }
     .amenities-group {
       @include media-breakpoint-down('md'){
         border-bottom: 1px solid #231F204C;
