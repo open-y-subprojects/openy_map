@@ -106,7 +106,7 @@
     .row {
       padding: 40px 0;
       @include media-breakpoint-down('md'){
-        padding-bottom: 0;
+        padding: 0;
       }
     }
     .amenities-plain-list {
@@ -121,6 +121,7 @@
     .amenities-group {
       @include media-breakpoint-down('md'){
         border-bottom: 1px solid #231F204C;
+        padding-left: 30px;
       }
       .group-header {
         text-transform: uppercase;
@@ -128,7 +129,9 @@
         line-height: 26px;
         margin-bottom: 21px;
       }
-
+      ul {
+        margin-bottom: 20px;
+      }
       header {
         position: relative;
         @include media-breakpoint-up('md'){
