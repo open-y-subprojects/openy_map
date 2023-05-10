@@ -117,11 +117,6 @@
       @include media-breakpoint-down('md'){
         columns: 1;
       }
-      li {
-        input {
-          margin-right: 5px;
-        }
-      }
     }
     .amenities-group {
       @include media-breakpoint-down('md'){
@@ -153,19 +148,53 @@
           }
         }
       }
-
-      ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        li {
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      li {
+        label {
+          cursor: pointer;
+          padding-left: 33px;
+          position: relative;
           input[type="checkbox"] {
-            margin-right: 5px;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
           }
+          .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: white;
+            border: 1px solid #231F2066;
+            border-radius: 3px;
+            &:after {
+              content: "";
+              position: absolute;
+              display: none;
+              left: 9px;
+              top: 2px;
+              width: 7px;
+              height: 15px;
+              border: solid #2F2F2F;
+              border-width: 0 3px 3px 0;
+              transform: rotate(45deg);
+            }
+          }
+          /* Show the checkmark when checked */
+          input:checked ~ .checkmark:after {
+            display: block;
+          }
+
         }
       }
     }
-
   }
   .selected-amenities {
     .btn {
