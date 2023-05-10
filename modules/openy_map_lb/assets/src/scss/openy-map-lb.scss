@@ -161,6 +161,9 @@
           cursor: pointer;
           padding-left: 33px;
           position: relative;
+          @include media-breakpoint-down('md'){
+            margin-bottom: 20px;
+          }
           input[type="checkbox"] {
             position: absolute;
             opacity: 0;
