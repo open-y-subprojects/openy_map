@@ -153,21 +153,29 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
    * @return array
    */
   protected function getAmenities() {
-    $result = [];
+    $result = [
+      'type' => 'plain',
+      'items' => [],
+    ];
     $terms = $this->taxonomyStorage->loadTree(self::AMENITIES_VOCABULARY, 0, 2, TRUE);
+    $max_depth = max(array_column($terms, 'depth'));
+    if ($max_depth > 0) {
+      $result['type'] = 'groups';
+    }
+
     foreach ($terms as $term) {
       /** @var \Drupal\taxonomy\Entity\Term $term */
       if ( $term->depth === 0 ) {
-        $result[$term->id()] = [
-          'group_name' => $term->label(),
-          'items'      => [],
+        $result['items'][$term->id()] = [
+          'item' => $term,
+          'children' => [],
         ];
       }
-    }
-    foreach ($terms as $term) {
-      if ($term->depth === 1) {
+      else {
         $parent = array_shift($term->parents);
-        $result[$parent]['items'][$term->id()] = $term->label();
+        $result['items'][$parent]['children'][$term->id()] = [
+          'item' => $term
+        ];
       }
     }
     return $result;

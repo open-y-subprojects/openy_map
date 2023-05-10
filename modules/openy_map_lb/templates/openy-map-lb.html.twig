@@ -49,17 +49,30 @@
           <div class="position-absolute amenities-filter collapse" id="amenities-filter">
             <div class="container">
               <div class="row">
-                {% for group_term_id, group in element['#amenities'] %}
-                  <div class="col-md-2 col-lg-2 amenities-group" data-total="{{ group['items']|length }}">
-                    <div class="d-none d-md-block"><strong>{{ group['group_name'] }}</strong></div>
-                    <header class="d-block d-md-none" data-toggle="collapse" href="#group-{{ group['group_name']|clean_id }}" role="button" aria-expanded="false" aria-controls="group-{{ group['group_name']|clean_id }}"><strong>{{ group['group_name'] }}</strong><i class="fas fa-plus"></i></header>
-                    <ul class="collapse d-md-block" id="group-{{ group['group_name']|clean_id }}">
-                      {% for item_id, item_label in group['items'] %}
-                        <li><label><input type="checkbox" name="field_location_amenities_target_id[{{ item_id }}]" value="{{ item_id }}">{{ item_label }}</label></li>
-                      {% endfor %}
+                {% if element['#amenities']['type'] == 'plain' %}
+                    <ul class="amenities-plain-list">
+                        {% for item_id, item in element['#amenities']['items'] %}
+                            <li>
+                                <label>{{ item['item'].label() }}<input type="checkbox" name="field_location_amenities_target_id[{{ item_id }}]" value="{{ item_id }}"><span class="checkmark"></span></label>
+                            </li>
+                        {% endfor %}
                     </ul>
-                  </div>
-                {% endfor %}
+                {% elseif element['#amenities']['type'] == 'groups' %}
+                    {% for term_id, group in element['#amenities']['items'] %}
+                        {% set label = group['item'].label() %}
+                        <div class="col-md-3 col-lg-2 amenities-group" data-total="{{ group['children']|length }}">
+                            <div class="group-header d-none d-md-block"><strong>{{ label }}</strong></div>
+                            <header class="d-block d-md-none" data-toggle="collapse" href="#group-{{ label|clean_id }}" role="button" aria-expanded="false" aria-controls="group-{{ label|clean_id }}"><strong>{{ label }}</strong><i class="fas fa-plus"></i></header>
+                            <ul class="collapse d-md-block" id="group-{{ label|clean_id }}">
+                                {% for item_id, item in group['children'] %}
+                                    <li>
+                                        <label>{{ item['item'].label() }}<input type="checkbox" name="field_location_amenities_target_id[{{ item_id }}]" value="{{ item_id }}"><span class="checkmark"></span></label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% endif %}
               </div>
             </div>
           </div>

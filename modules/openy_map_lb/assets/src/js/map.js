@@ -107,19 +107,604 @@
     }
   };
 
-  Drupal.openyMapLeaflet = function () {
+  Drupal.openyMap = function () {
     return {
       state: state,
-      origin: window.location.origin,
-      baseLayer: Drupal.baseLayerWikimedia,
+      origin: `${window.location.origin}${drupalSettings.path.baseUrl}`,
       // Array of location data.
       locations: null,
+      // URL of marker image.
+      marker_image_url: null,
       // The Map object.
       map: null,
       // The distance filter limit, in miles.
       distance_limit: null,
       // The center point of the map.
       center_point: null,
+      // The center point of a search location or distance limit.
+      search_center_point: null,
+      // Marker designating the center point.
+      search_center_marker: null,
+
+      /**
+       * Utility functions.
+       */
+      // Checks if the provider library object has loaded
+      libraryIsLoaded: function () {
+        return typeof window.google !== 'undefined';
+      },
+      // Normalizes a map-vendor specific representation of
+      // a coordinate point to a {lat:x, lon:y} object.
+      normalize_point: function (point) {
+        return {
+          'lat': point.lat(),
+          'lon': point.lng()
+        };
+      },
+      // Convert a number from degrees to radians.
+      toRad: function (n) {
+        return n * Math.PI / 180;
+      },
+      // Geocoder.
+      geocoder: function () {
+        return typeof google.maps !== 'undefined' ? new google.maps.Geocoder() : {};
+      },
+      // Convert string to url format:
+      // remove all non-alphanumeric characters, convert to lowercase,
+      // replace spaces with dashes.
+      encode_to_url_format: function (txt) {
+        return txt
+          .toLowerCase()
+          .replace(/[^\w ]+/g, '')
+          .replace(/ +/g, '-');
+      },
+
+      /**
+       * Main functionality.
+       */
+      init: function (args) {
+        this.component_el = args.component_el;
+        this.locations = args.map_data;
+        this.default_tags = drupalSettings.openyMapSettings.default_tags;
+
+        this.init_state();
+
+        this.marker_image_url = args.marker_image_url || null;
+        this.search_center_marker = args.search_center_marker || null;
+
+        this.map_el = this.component_el.find('.openy-map');
+        this.messages_el = this.component_el.find('.messages');
+        this.selected_amenities_el = this.component_el.find('.selected-amenities');
+
+        this.map_controls_el = this.component_el.find('.map_controls');
+        this.search_field_el = this.map_controls_el.find('input#search_field');
+        this.distance_limit_el = this.map_controls_el.find('select#distance_limit');
+        this.tag_filters_el = this.map_controls_el.find('.tag_filters');
+        this.amenities_filter_el = this.map_controls_el.find('#amenities-filter');
+
+        this.init_map();
+        this.init_map_locations();
+        this.draw_map_controls();
+        this.hookup_map_controls_events();
+        this.hookup_state_events();
+        this.update_tag_filters();
+
+        var mapLocation = document.location.href.match(/&?[amp;]?map_location=([\w|\+]*)&?[amp;]?/),
+          component = this;
+
+        this.component_el.find('.zip-code button.btn')
+          .on('click', $.proxy(this.apply_search, this));
+
+        this.search_field_el.on('keypress', (e) => {
+          if (e.keyCode === 13) this.apply_search();
+        });
+        if (mapLocation) {
+          this.search_field_el.val(mapLocation[1].replace(/\+/g, ' '));
+          $('.distance_limit option').eq(2).attr('selected', true);
+          $('.zip-code button.btn').click();
+        }
+      },
+
+      init_state: function () {
+        this.state.element = this.component_el;
+        // Extract tags.
+        this.locations.map((loc) => {
+          if (!loc.tags) {
+            return;
+          }
+          const tag = loc.tags[0];
+          loc.tag = tag;
+          this.state.addTag(tag, { 'marker_icon': loc.icon });
+        });
+        // Collect amenities
+        this.locations.map((loc) => {
+          const element = $(`article[data-openy-map-location-id=${loc.location_id}]`);
+          if (element.length > 0) {
+            loc.element = element;
+            loc.amenities = element.data('amenities').map(el => +el) || [];
+            this.state.addAmenities(loc.tag, loc.amenities);
+            $('.type', loc.element).prepend(`<img src='${this.origin}${loc.icon}' alt="marker icon"/>`);
+          }
+        });
+        // Init active filters from URL.
+        this.init_active_tags();
+        this.init_active_amenities();
+      },
+
+      // Initializes the base map.
+      init_map: function () {
+        this.map = new google.maps.Map(this.map_el[0], {
+          scaleControl: true,
+          center: this.center,
+          zoom: 9,
+          scrollwheel: false,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        this.search_center_marker = this.search_center_marker || new google.maps.Marker({
+          position: this.center_point,
+          animation: google.maps.Animation.DROP
+        });
+
+        if (this.search_center_marker) {
+          this.search_center_marker.setVisible(false);
+          this.search_center_marker.setMap(this.map);
+        }
+      },
+
+      init_map_locations: function () {
+        this.locations.map((loc) => {
+          loc.point = new google.maps.LatLng(loc.lat, loc.lng);
+          let marker_anchor = new google.maps.MarkerImage(this.marker_image_url) || null;
+          marker_anchor = loc.icon ? new google.maps.MarkerImage(loc.icon) : marker_anchor;
+          const shadow_anchor = loc.shadow ? new google.maps.MarkerImage(loc.shadow) : null;
+
+          const marker = new google.maps.Marker({
+            position: loc.point,
+            icon: marker_anchor,
+            shadow: shadow_anchor,
+            animation: google.maps.Animation.DROP
+          });
+
+          loc.infowindow = new google.maps.InfoWindow({
+            content: `<div class="marker_tooltip">${loc.markup}</div>`
+          });
+
+          google.maps.event.addListener(marker, 'click', (infowindow, marker) => {
+            return () => {
+              this.locations.map((loc) => {
+                loc.infowindow.close();
+              })
+              infowindow.open(this.map, marker);
+            };
+          });
+
+          marker.setVisible(false);
+          marker.setMap(this.map);
+          loc.marker = marker;
+        });
+      },
+
+      // Populates a state of active tags from an URL parameter "type".
+      // Run once on init()
+      init_active_tags: function () {
+        const active_tags = [];
+        // Tags from the URL Params if any.
+        const tags = this.get_parameters('type');
+        if (tags.length === 0) {
+          this.state.setTagsFilter(this.default_tags);
+        } else {
+          Object.keys(this.state.getTags()).map((tag) => {
+            if ($.inArray(this.encode_to_url_format(tag), tags) >= 0) {
+              active_tags.push(tag);
+            }
+          })
+          this.state.setTagsFilter(active_tags);
+        }
+      },
+
+      // Populates a state of active amenities from an URL parameter "amenities".
+      // Run once on init()
+      init_active_amenities: function () {
+        const amenities = this.get_parameters('amenities');
+        this.state.setAmenitiesFilter(amenities);
+      },
+      // Get url params.
+      get_parameters: function (param = false) {
+        const searchString = decodeURI(window.location.search.substring(1));
+        const params = searchString.split("&");
+        const hash = {};
+        params.map(param => {
+          const [key, val] = param.split("=");
+          hash[key] = (typeof val === 'string') ? val.includes(',') ? val.split(',') : [val] : [];
+        });
+        return (param) ? (typeof hash[param] !== 'undefined') ? hash[param] : [] : params;
+      },
+
+      // Attaches events to various map controls.
+      hookup_map_controls_events: function () {
+        this.tag_filters_el.find('input[type=checkbox]').on('change', $.proxy(this.update_tag_filters, this));
+        this.search_field_el.on('change', $.proxy(this.apply_search, this));
+        this.search_field_el.on("autocompleteselect", $.proxy(this.apply_autocomplete_search, this));
+        this.distance_limit_el.on('change', $.proxy(this.apply_distance_limit, this));
+        this.amenities_filter_el.find('input[type=checkbox]').on('change', $.proxy(this.update_amenities_filters, this));
+
+        $('.amenities-group', this.amenities_filter_el).each(function (group) {
+          $('ul', group).on('show.bs.collapse', function () {
+            $('header i', group).removeClass('fa-plus').addClass('fa-times');
+          });
+          $('ul', group).on('hide.bs.collapse', function () {
+            $('header i', group).removeClass('fa-times').addClass('fa-plus');
+          });
+        });
+      },
+
+      hookup_state_events: function () {
+        this.component_el.on('filterChanged:tags filterChanged:amenities filterChanged:distance', (event, data) => {
+          this.apply_filters();
+        });
+        this.component_el.on('filtersApplied', (e, data) => {
+          this.set_url_parameters();
+          this.draw_map_locations(data.locations);
+        });
+        this.component_el.on('filterChanged:tags', (e, data) => {
+          this.update_amenities_controls();
+        });
+        this.component_el.on('filterChanged:amenities', (e, data) => {
+          this.draw_selected_amenities();
+        })
+      },
+
+      // Attempts a map search against Google's
+      // GeoCoding API.  If successful, the map
+      // is recentered according to the result.
+      apply_search: function () {
+        var q = this.search_field_el.val();
+        if (q === '') {
+          this.reset_search_results();
+          return;
+        }
+
+        this.geocoder().geocode({
+          'address': q
+        }, (results, status) => {
+          if (status === 'OK') {
+            this.search_center_point = results[0].geometry.location;
+
+            if (results[0].geometry.bounds) {
+              this.map.fitBounds(results[0].geometry.bounds);
+            } else {
+              var bounds = new google.maps.LatLngBounds();
+              bounds.extend(this.search_center_point);
+              // Don't zoom in too far on only one marker
+              if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+                var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+                bounds.extend(extendPoint1);
+                bounds.extend(extendPoint2);
+              }
+              this.map.fitBounds(bounds);
+            }
+
+            this.search_center = this.map.getCenter();
+            this.draw_search_center();
+            this.apply_distance_limit();
+          }
+        });
+      },
+
+      apply_autocomplete_search: function (event, ui) {
+        var locations = this.locations.filter((loc) => loc.name === ui.item.value);
+        // Redraw map for selected location.
+        if (this.search_center === null) {
+          this.search_center = this.map.getCenter();
+        }
+
+        this.search_center_marker.setPosition(this.search_center_point);
+        this.search_center_marker.setVisible(false);
+        var bounds = new google.maps.LatLngBounds();
+
+        locations.map((loc) => {
+          bounds.extend(loc.marker.getPosition());
+          loc.marker.setVisible(true);
+        })
+
+        this.map.fitBounds(bounds);
+        this.state.distance = '';
+        this.draw_map_locations(locations);
+      },
+
+      // Executed every time the viewer sets the distance limit to a new value.
+      apply_distance_limit: function () {
+        if (this.search_center === null) {
+          this.search_center = this.map.getCenter();
+        }
+
+        this.draw_search_center();
+        this.state.setDistance(this.distance_limit_el.val());
+      },
+
+      // Executed if was provided empty ZIP code.
+      reset_search_results: function () {
+        if (this.search_center === null) {
+          this.search_center = this.map.getCenter();
+        }
+
+        if (this.search_center_point) {
+          this.search_center_marker.setPosition(this.search_center_point);
+          this.search_center_marker.setVisible(false);
+        }
+        this.state.setDistance('');
+      },
+      update_amenities_controls: function () {
+        const amenitiesFilters = this.state.getAmenitiesFilter();
+        const availableAmenities = this.state.getAvailableAmenities();
+
+        this.amenities_filter_el.find('input[type=checkbox]').each((idx, el) => {
+          const value = +$(el).val();
+          if ($.inArray(value, availableAmenities) === -1) {
+            $(el).parents('li').attr('checked', false).addClass('hidden');
+          }
+          else {
+            $(el).parents('li').removeClass('hidden');
+          }
+          if ($.inArray(value, amenitiesFilters) > -1) {
+            $(el).attr('checked', true);
+          }
+        });
+        this.amenities_filter_el.find('.amenities-group').each((idx, el) => {
+          const totalCount = +$(el).data('total');
+          const hiddenCount = +$('ul li.hidden', el).length;
+          if (totalCount === hiddenCount) {
+            $(el).addClass('hidden');
+          }
+          else {
+            $(el).removeClass('hidden');
+          }
+        });
+      },
+
+      // Applies the current checkbox state of the tag filter controls
+      // to the internal filters data structure.
+      // Called at init time, and after every checkbox state change.
+      update_tag_filters: function () {
+        const tag_filters = [];
+        this.tag_filters_el.find('input[type=checkbox]:checked').each((idx, el) => {
+          tag_filters.push($(el).val());
+        });
+        this.state.setTagsFilter(tag_filters);
+      },
+
+      update_amenities_filters: function () {
+        const amenities_filters = [];
+        this.amenities_filter_el.find('input[type=checkbox]:checked').each((idx, el) => {
+          amenities_filters.push(+$(el).val());
+        });
+        this.state.setAmenitiesFilter(amenities_filters);
+      },
+
+      // Applies tag and distance filters to a list of locations,
+      // returns the filtered list.
+      apply_filters: function () {
+        let locations = this.apply_tag_filters(this.locations);
+        locations = this.apply_distance_filters(locations);
+        locations = this.apply_amenities_filters(locations);
+        this.component_el.trigger('filtersApplied', { locations: locations });
+      },
+
+      // Applies tag filters to a list of locations,
+      // returns the filtered list.
+      apply_tag_filters: function (locations) {
+        if (this.state.getTagsFilter().length === 0) {
+          return locations;
+        }
+
+        return locations.filter((loc) => {
+          const intersection = loc.tags.filter(x => this.state.getTagsFilter().includes(x));
+          return intersection.length > 0;
+        });
+      },
+
+      // Applies distance filters to a list of locations,
+      // returns the filtered list.
+      apply_distance_filters: function (locations) {
+        if (!this.search_center) {
+          return locations;
+        }
+
+        if (this.state.getDistance() === '') {
+          return locations;
+        }
+
+        const search_center = this.normalize_point(this.search_center);
+
+        var lat1 = parseFloat(search_center.lat);
+        var lon1 = parseFloat(search_center.lon);
+        var rlat1 = this.toRad(lat1);
+
+        return locations.filter(loc => {
+          const R = 3963,
+            lat2 = parseFloat(loc.lat),
+            lon2 = parseFloat(loc.lng);
+          const rlat = this.toRad(lat2 - lat1);
+          const rlon = this.toRad(lon2 - lon1);
+          const rlat2 = this.toRad(lat2);
+
+          const a = Math.sin(rlat / 2) * Math.sin(rlat / 2) + Math.sin(rlon / 2) * Math.sin(rlon / 2) * Math.cos(rlat1) * Math.cos(rlat2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const d = R * c;
+
+          if (d <= this.state.getDistance()) {
+            // Add the distance to the object.
+            loc.distance = d;
+            return true;
+          }
+          return false;
+        });
+      },
+
+      // Applies tag filters to a list of locations,
+      // returns the filtered list.
+      apply_amenities_filters: function (locations) {
+        if (this.state.getAmenitiesFilter().length === 0) {
+          return locations;
+        }
+
+        return locations.filter((loc) => {
+          if (loc.amenities.length === 0) {
+            return false;
+          }
+          const intersection = loc.amenities.filter(x => this.state.getAmenitiesFilter().includes(x));
+          return intersection.length > 0;
+        });
+      },
+
+      // Update url params.
+      set_url_parameters: function () {
+        var url = document.location.pathname,
+          params = this.get_parameters(),
+          filterTagsRaw = this.tag_filters,
+          filteramenitiesRaw = this.amenities_filters,
+          filterTags = '',
+          filteramenities = '',
+          mapLocation = $('.search_field').val() || (params.hasOwnProperty('map_location') && params.map_location) || '';
+        if (mapLocation) {
+          mapLocation = '?map_location=' + this.encode_to_url_format(mapLocation);
+        }
+        if (filterTagsRaw) {
+          filterTags = !mapLocation ? '?' : '&';
+          filterTags += 'type=';
+          filterTagsRaw.forEach(tag => {
+            filterTags += this.encode_to_url_format(tag) + ',';
+          }, this, filterTags);
+          filterTags = filterTags.substring(0, filterTags.length - 1);
+        }
+        if (filteramenitiesRaw) {
+          filteramenities = '&amenities=';
+          filteramenitiesRaw.forEach(tag => {
+            filteramenities += this.encode_to_url_format(tag) + ',';
+          }, this, filteramenities);
+          filteramenities = filteramenities.substring(0, filteramenities.length - 1);
+        }
+        window.history.replaceState(null, null, url + mapLocation + filterTags + filteramenities);
+      },
+
+      // Renders an extra set of filter boxes below the map.
+      draw_map_controls: function () {
+        // Show tags filter as default checkboxes.
+        const html = Object.entries(this.state.getTags()).reduce((acc, [tag, value]) => {
+          const checked = ($.inArray(tag, this.initial_active_tags) >= 0);
+          // Show tags filter as default checkboxes.
+          let tagHtml = `
+<label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
+  <img class="tag_icon inline-hidden-sm" src="/${value.marker_icon}" aria-hidden="true" />
+  <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
+</label>`;
+          acc += tagHtml;
+          return acc;
+        }, '');
+
+        this.tag_filters_el.append(html);
+        this.tag_filters_el.find('input[type=checkbox]').on('click', (e) => {
+          $(e.target).parent().toggleClass('active');
+        });
+
+        // Add locations autocomplete to search field.
+        this.search_field_el.autocomplete({
+          minLength: 3,
+          source: this.locations.map(loc => loc.name)
+        });
+        this.draw_selected_amenities();
+      },
+
+      draw_selected_amenities: function (e) {
+        this.selected_amenities_el.empty();
+
+        this.state.getAmenitiesFilter().map((id) => {
+          const el = $(`input[value=${id}]`, this.amenities_filter_el).parent();
+          this.selected_amenities_el.append(`<div class='btn' id="selected-amenity-${id}">${el.html()} <i class="fas fa-times"></i></div>`);
+        });
+
+        $('.btn', this.selected_amenities_el).off('click').on('click', (e) => {
+          const value = $('input', e.target).val();
+          this.amenities_filter_el.find(`input[value=${value}]`).click();
+        });
+      },
+
+      // Update locations on the map by setting their visibility
+      // and refit the map bounds to the current set of visible locations.
+      draw_map_locations: function (locations) {
+        // If the location list is empty, don't adjust the map at all.
+        if (locations.length === 0) {
+          if (this.search_center_point !== null) {
+            this.map.setCenter(this.search_center_point);
+          }
+          return;
+        }
+        var bounds = new google.maps.LatLngBounds();
+
+        locations.map((loc) => {
+          bounds.extend(loc.marker.getPosition());
+          loc.marker.setVisible(true);
+        });
+
+        // Don't zoom in too far on only one marker.
+        if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+          var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+          var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+          bounds.extend(extendPoint1);
+          bounds.extend(extendPoint2);
+        }
+        this.map.fitBounds(bounds);
+        this.draw_list_locations(locations);
+
+      },
+
+      // Render the list of locations.
+      draw_list_locations: function (locations) {
+        // Hide all heading locations.
+        this.locations.map((loc) => {
+          if (typeof loc.element !== 'undefined') {
+            loc.element.parent().hide();
+            loc.element.parents('.locations-list-lb').find('.location-title').hide();
+          }
+        });
+
+        if (locations.length === 0) {
+          const message_html = `<div class="col-xs-12 text-center"><p>${Drupal.t('No locations were found in this area. Please try a different area or increase your search distance.')}</p></div>`;
+          this.messages_el.hide().html(message_html).fadeIn();
+          return;
+        } else {
+          this.messages_el.hide();
+        }
+
+        // Show filtered locations.
+        locations.map((loc) => {
+          if (typeof loc.element !== 'undefined') {
+            loc.element.parent().show();
+            loc.element.parents('.locations-list-lb').find('.location-title').show();
+          }
+        });
+      },
+
+      draw_search_center: function () {
+        if (this.search_center_point) {
+          this.search_center_marker.setPosition(this.search_center_point);
+          this.search_center_marker.setVisible(true);
+        }
+      }
+    }
+  };
+
+  Drupal.openyMapLeaflet = function () {
+    return {
+      state: state,
+      origin: `${window.location.origin}${drupalSettings.path.baseUrl}`,
+      baseLayer: Drupal.baseLayerWikimedia,
+      // Array of location data.
+      locations: null,
+      // The Map object.
+      map: null,
       // The center point of a search location or distance limit.
       search_center_point: null,
       // Marker designating the center point.
@@ -230,7 +815,7 @@
             loc.element = element;
             loc.amenities = element.data('amenities').map(el => +el) || [];
             this.state.addAmenities(loc.tag, loc.amenities);
-            $('.type', loc.element).prepend(`<img src='/${loc.icon}' alt="marker icon"/>`);
+            $('.type', loc.element).prepend(`<img src='${this.origin}${loc.icon}' alt="marker icon"/>`);
           }
         });
         // Init active filters from URL.
@@ -247,8 +832,8 @@
           this.map.dragging.disable();
         }
         var icon = L.icon({
-          iconUrl: this.origin + '/' + this.search_icon,
-          iconRetinaUrl: this.search_icon_retina,
+          iconUrl: `${this.origin}${this.search_icon}`,
+          iconRetinaUrl: `${this.origin}${this.search_icon_retina}`,
           shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
           iconSize: [25, 41],
           iconAnchor: [12, 41],
@@ -261,6 +846,7 @@
           this.search_center_marker.removeFrom(this.map);
         }
       },
+
       init_map_locations: function () {
         const iconOptionsKeys = ['iconSize', 'shadowSize', 'iconAnchor', 'shadowAnchor', 'popupAnchor'];
         this.locations.map((loc) => {
@@ -360,27 +946,26 @@
       // Attempts a map search against OSM Nominatim API. If successful, the map
       // is recentered according to the result.
       apply_search: function () {
-        var self = this;
         var q = this.search_field_el.val();
         if (q === '') {
           this.reset_search_results();
           return;
         }
 
-        this.geocode(q, function (data, status) {
+        this.geocode(q, (data, status) => {
           if (status === 'success' && data.length > 0) {
-            self.search_center_point = L.latLng(data[0].lat, data[0].lon);
+            this.search_center_point = L.latLng(data[0].lat, data[0].lon);
 
             if (data[0].boundingbox) {
               var bounds = L.latLngBounds();
               bounds.extend(L.latLng(data[0].boundingbox[0], data[0].boundingbox[2]));
               bounds.extend(L.latLng(data[0].boundingbox[1], data[0].boundingbox[3]));
-              self.map.fitBounds(bounds, self.fitBoundsOptions);
+              this.map.fitBounds(bounds, this.fitBoundsOptions);
             }
 
-            self.search_center = self.search_center_point;
-            self.draw_search_center();
-            self.apply_distance_limit();
+            this.search_center = this.search_center_point;
+            this.draw_search_center();
+            this.apply_distance_limit();
           }
         });
       },
@@ -400,11 +985,10 @@
 
         this.search_center_marker.removeFrom(this.maps);
         var bounds = L.latLngBounds();
-        for (var i = 0; i < locations.length; i++) {
-          var loc = locations[i];
+        locations.map((loc) => {
           bounds.extend(loc.point);
           loc.marker.addTo(this.map);
-        }
+        })
         this.map.fitBounds(bounds, this.fitBoundsOptions);
         this.state.distance = '';
         this.draw_map_locations(locations);
@@ -638,7 +1222,7 @@
           const checked = ($.inArray(tag, this.state.getTagsFilter()) >= 0);
           let tagHtml = `
 <label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
-  <img class="tag_icon inline-hidden-sm" src="/${value.marker_icon}" aria-hidden="true" />
+  <img class="tag_icon inline-hidden-sm" src="${this.origin}/${value.marker_icon}" aria-hidden="true" />
   <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
 </label>`;
           acc += tagHtml;
@@ -740,12 +1324,12 @@
         return;
       }
 
-      let data = settings.openyMap;
       let map;
 
       switch (settings.openyMapSettings.engine) {
         case 'gmaps':
           map = new Drupal.openyMap();
+          map.search_icon = settings.openyMapSettings.search_icon;
           break;
 
         case 'leaflet':
@@ -799,16 +1383,16 @@
               return;
             }
 
-            map.init({
-              component_el: $canvas.closest('.openy-map-wrapper'),
-              map_data: data,
-            });
+          map.init({
+            component_el: $canvas.closest('.block-openy-map'),
+            map_data: settings.openyMap
+          });
 
-            // Reset openyMap data (fix for old pins on new map after ajax call).
-            settings.openyMap = [];
-            clearInterval(timer);
-          }, 100);
-        });
+          // Reset openyMap data (fix for old pins on new map after ajax call).
+          settings.openyMap = [];
+          clearInterval(timer);
+        }, 100);
+      });
     }
   };
 
