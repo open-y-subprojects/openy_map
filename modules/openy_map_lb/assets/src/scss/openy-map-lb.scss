@@ -58,6 +58,7 @@
 
     .tag_filters {
       .btn {
+        font-size: 18px;
         padding: 6px 20px;
         margin-right: 30px;
         @include media-breakpoint-down('md'){
