@@ -329,12 +329,12 @@
         this.distance_limit_el.on('change', $.proxy(this.apply_distance_limit, this));
         this.amenities_filter_el.find('input[type=checkbox]').on('change', $.proxy(this.update_amenities_filters, this));
 
-        $('.amenities-group', this.amenities_filter_el).each(function (group) {
-          $('ul', group).on('show.bs.collapse', function () {
-            $('header i', group).removeClass('fa-plus').addClass('fa-times');
+        $('.amenities-group', this.amenities_filter_el).each(function (idx, group){
+          $('ul', this).on('show.bs.collapse', () => {
+            $('header i', this).removeClass('fa-plus').addClass('fa-times');
           });
-          $('ul', group).on('hide.bs.collapse', function () {
-            $('header i', group).removeClass('fa-times').addClass('fa-plus');
+          $('ul', this).on('hide.bs.collapse', () => {
+            $('header i', this).removeClass('fa-times').addClass('fa-plus');
           });
         });
       },
@@ -933,12 +933,12 @@
         this.distance_limit_el.on('change', $.proxy(this.apply_distance_limit, this));
         this.amenities_filter_el.find('input[type=checkbox]').on('change', $.proxy(this.update_amenities_filters, this));
 
-        $('.amenities-group', this.amenities_filter_el).each(function (group){
-          $('ul', group).on('show.bs.collapse', function (){
-            $('header i', group).removeClass('fa-plus').addClass('fa-times');
+        $('.amenities-group', this.amenities_filter_el).each(function (idx, group){
+          $('ul', this).on('show.bs.collapse', () => {
+            $('header i', this).removeClass('fa-plus').addClass('fa-times');
           });
-          $('ul', group).on('hide.bs.collapse', function (){
-            $('header i', group).removeClass('fa-times').addClass('fa-plus');
+          $('ul', this).on('hide.bs.collapse', () => {
+            $('header i', this).removeClass('fa-times').addClass('fa-plus');
           });
         });
       },
