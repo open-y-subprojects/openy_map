@@ -3,6 +3,9 @@
  * @file
  * Module file.
  */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -52,6 +55,17 @@ function openy_map_lb_preprocess_block__lb_openy_map(&$variables) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function openy_map_lb_node_view_alter( array &$build, EntityInterface $entity, EntityViewDisplayInterface $display ) {
+  $activeTypes = \Drupal::configFactory()->get('openy_map.settings')->get('active_types');
+  $activeTypes = !empty($activeTypes) ? array_keys(array_filter($activeTypes)) : [];
+  if ($build['#view_mode'] == 'teaser' && $entity->hasField('field_location_coordinates') && in_array($entity->bundle(), $activeTypes)) {
+    $build['#cache']['contexts'][] = 'url.path.parent';
+  }
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function openy_map_lb_theme_suggestions_node_alter(array &$suggestions, array $variables) {
@@ -62,12 +76,12 @@ function openy_map_lb_theme_suggestions_node_alter(array &$suggestions, array $v
   // Check for active types.
   $activeTypes = \Drupal::configFactory()->get('openy_map.settings')->get('active_types');
   $activeTypes = !empty($activeTypes) ? array_keys(array_filter($activeTypes)) : [];
+  if (is_null($has_layout)) {
+    $current_page = Drupal::routeMatch()->getParameter('node');
+    $has_layout = ($current_page instanceof NodeInterface) && $current_page->hasField('layout_builder__layout');
+  }
   // Add universal template for all location content type teasers.
   if ($view_mode == 'teaser' && $node->hasField('field_location_coordinates') && in_array($node->bundle(), $activeTypes)) {
-    if (is_null($has_layout)) {
-      $current_page = Drupal::routeMatch()->getParameter('node');
-      $has_layout = ($current_page instanceof NodeInterface) && $current_page->hasField('layout_builder__layout');
-    }
     if ($has_layout) {
       $suggestions[] = 'node__location_type__lb_teaser';
     }
