@@ -6,6 +6,19 @@
   font-family: var(--ylb-font-family-cachet);
   .openy-map-wrapper {
     margin-bottom: 40px;
+    .marker_tooltip {
+      font-size: 15px;
+      .card {
+        border: none;
+      }
+      .card-body {
+        padding: 0;
+      }
+      .type,
+      .card-footer {
+        display: none;
+      }
+    }
   }
   .form-control {
     height: auto;
