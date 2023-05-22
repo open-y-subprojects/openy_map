@@ -1,6 +1,6 @@
 {
   "name": "map.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Open Y LB map library",
   "main": "map.js",
   "scripts": {
