@@ -197,7 +197,7 @@
       font-size: 30px;
       line-height: 32px; }
       .block-openy-map .locations-list-lb .views-row .node .card-body h2 a {
-        color: var(--wsPrimaryColor); }
+        color: var(--wsPartnerColor); }
     .block-openy-map .locations-list-lb .views-row .node .card-body .type {
       text-transform: uppercase;
       color: var(--ylb-color-dark-grey);

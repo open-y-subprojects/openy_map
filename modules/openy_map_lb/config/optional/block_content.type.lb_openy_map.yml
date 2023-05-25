@@ -2,6 +2,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: lb_openy_map
-label: 'OpenY Map LB'
+label: 'Locations'
 revision: 0
 description: 'Helper module for the custom "OpenY Map - LB" block type.'
