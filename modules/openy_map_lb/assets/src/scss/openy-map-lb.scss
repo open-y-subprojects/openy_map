@@ -28,7 +28,7 @@
   }
 
   .map_controls {
-    background-color: var(--wsPrimaryColor);
+    background-color: var(--wsPrimaryColor, lightgrey);
     color: var(--ylb-color-white);
     padding: 40px 0 20px;
     @include media-breakpoint-up(md){
@@ -47,7 +47,7 @@
       }
       .btn {
         background-color: var(--ylb-color-white);
-        color: var(--wsTertiaryColor);
+        color: var(--wsTertiaryColor, black);
         border: 1px solid var(--ylb-color-light-grey);
         border-left: none;
         border-top-right-radius: 10px;
@@ -80,7 +80,7 @@
           margin-bottom: 20px;
         }
         color: var(--ylb-color-white);
-        background-color: rgba(var(--wsSecondaryColorRGB), 0.3);
+        background-color: rgba(var(--wsSecondaryColorRGB, 0, 0, 0), 0.3);
         border-radius: 20px;
         text-transform: none;
         input[type="checkbox"] {
@@ -248,7 +248,7 @@
     .views-row {
       .fa-clock,
       .fa-phone {
-        color: var(--wsTertiaryColor);
+        color: var(--wsTertiaryColor, black);
       }
       .node {
         font-size: 18px;
@@ -261,7 +261,7 @@
             font-size: 30px;
             line-height: 32px;
             a {
-              color: var(--wsPrimaryColor);
+              color: var(--wsPrimaryColor, blue);
             }
           }
           .type {
@@ -289,7 +289,7 @@
               margin-bottom: 20px;
               padding-left: 25px;
               a {
-                color: var(--wsPartnerColor);
+                color: var(--wsPartnerColor, blue);
               }
             }
             .phone {
@@ -300,7 +300,7 @@
                 display: inline;
                 a {
                   font-weight: normal;
-                  color: var(--wsPartnerColor);
+                  color: var(--wsPartnerColor, blue);
                 }
               }
             }
@@ -316,16 +316,16 @@
           background-color: transparent;
           .btn {
             border-radius: 10px;
-            border-color: var(--wsPartnerColor);
-            color: var(--wsPartnerColor);
+            border-color: var(--wsPartnerColor, black);
+            color: var(--wsPartnerColor, black);
             text-transform: none;
             font-size: 18px;
             line-height: 22px;
             .fa {
-              color: var(--wsPartnerColor);
+              color: var(--wsPartnerColor, black);
             }
             &:hover {
-              background-color: var(--wsPartnerColor);
+              background-color: var(--wsPartnerColor, black);
               color: var(--ylb-color-white);
               .fa {
                 color: var(--ylb-color-white);
