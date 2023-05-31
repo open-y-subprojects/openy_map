@@ -43,12 +43,12 @@
     .zip-code {
       .form-control {
         padding: 14.5px 22.5px;
-        border: 1px solid var(--ylb-color-light-grey);
+        border: 1px solid var(--ylb-color-light-grey-3);
       }
       .btn {
         background-color: var(--ylb-color-white);
         color: var(--wsTertiaryColor, black);
-        border: 1px solid var(--ylb-color-light-grey);
+        border: 1px solid var(--ylb-color-light-grey-3);
         border-left: none;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
@@ -95,7 +95,7 @@
           margin-right: 0;
         }
         &.active {
-          color: var(--ylb-color-dark-grey);
+          color: var(--ylb-color-dark-grey-1);
           background-color: var(--ylb-color-white);
           img {
             display: inline-block;
@@ -134,7 +134,7 @@
     }
     .amenities-group {
       @include media-breakpoint-down(sm){
-        border-bottom: 1px solid var(--ylb-color-light-grey);
+        border-bottom: 1px solid var(--ylb-color-light-grey-3);
         padding-left: 30px;
       }
       .group-header {
@@ -195,7 +195,7 @@
             height: 25px;
             width: 25px;
             background-color: white;
-            border: 1px solid var(--ylb-color-light-grey);
+            border: 1px solid var(--ylb-color-light-grey-3);
             border-radius: 3px;
             &:after {
               content: "";
@@ -205,7 +205,7 @@
               top: 2px;
               width: 7px;
               height: 15px;
-              border: solid var(--ylb-color-dark-grey);
+              border: solid var(--ylb-color-dark-grey-1);
               border-width: 0 3px 3px 0;
               transform: rotate(45deg);
             }
@@ -224,7 +224,7 @@
     .btn {
       margin-right: 25px;
       line-height: 28px;
-      background-color: var(--ylb-color-light-grey);
+      background-color: var(--ylb-color-light-grey-3);
       border-radius: 20px;
       text-transform: none;
       padding: 1px 15px;
@@ -243,7 +243,7 @@
       margin-bottom: 40px;
       font-size: 49px;
       line-height: 60px;
-      color: var(--ylb-color-dark-grey);
+      color: var(--ylb-color-dark-grey-1);
     }
     .views-row {
       .fa-clock,
@@ -266,7 +266,7 @@
           }
           .type {
             text-transform: uppercase;
-            color: var(--ylb-color-dark-grey);
+            color: var(--ylb-color-dark-grey-1);
             margin-bottom: 20px;
             font-weight: 600;
             img {
