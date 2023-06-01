@@ -641,6 +641,9 @@
           }
           return;
         }
+
+        // Hide all the markers prior to showing only those of interest.
+        this.locations.map(loc => loc.marker.setVisible(false));
         var bounds = new google.maps.LatLngBounds();
 
         locations.map((loc) => {
