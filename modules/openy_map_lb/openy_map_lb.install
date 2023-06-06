@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Change label block
+ */
+function openy_map_lb_update_9001(&$sandbox) {
+  $path = \Drupal::service('extension.list.module')->getPath('openy_map_lb') . '/config/optional';
+  /** @var \Drupal\config_import\ConfigImporterService $config_importer */
+  $config_importer = \Drupal::service('config_import.importer');
+  $config_importer->setDirectory($path);
+  $config_importer->importConfigs([
+    'block_content.type.lb_openy_map',
+  ]);
+}

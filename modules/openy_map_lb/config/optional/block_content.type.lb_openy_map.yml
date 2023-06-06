@@ -2,6 +2,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: lb_openy_map
-label: 'Locations'
+label: 'Location finder'
 revision: 0
-description: 'Helper module for the custom "OpenY Map - LB" block type.'
+description: 'Helper module for the custom "Location finder" block type.'
