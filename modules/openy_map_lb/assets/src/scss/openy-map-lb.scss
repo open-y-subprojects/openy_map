@@ -29,7 +29,7 @@
 
   .map_controls {
     background-color: var(--wsPrimaryColor, lightgrey);
-    color: var(--ylb-color-white);
+    color: var(--ylb-color-white, white);
     padding: 40px 0 20px;
     @include media-breakpoint-up(md){
       padding: 20px 0;
@@ -43,12 +43,12 @@
     .zip-code {
       .form-control {
         padding: 14.5px 22.5px;
-        border: 1px solid var(--ylb-color-light-grey);
+        border: 1px solid var(--ylb-color-light-grey-3, lightgray);
       }
       .btn {
-        background-color: var(--ylb-color-white);
+        background-color: var(--ylb-color-white, white);
         color: var(--wsTertiaryColor, black);
-        border: 1px solid var(--ylb-color-light-grey);
+        border: 1px solid var(--ylb-color-light-grey-3, lightgray);
         border-left: none;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
@@ -57,13 +57,16 @@
     .distance {
       select {
         padding: 14.5px 18.5px;
+        background: white url(../img/arrow_down.svg) no-repeat right 20px center;
+        background-size: 14px;
+        font-family: var(--ylb-font-family-verdana);
       }
     }
     .tags-and-amenities {
       @include media-breakpoint-down(sm){
         margin-top: 40px;
         .tags-filters-col {
-          border-bottom: 1px solid var(--ylb-color-white);
+          border-bottom: 1px solid var(--ylb-color-white, white);
           padding-bottom: 10px;
           margin-bottom: 20px;
         }
@@ -79,7 +82,7 @@
         @include media-breakpoint-down(sm){
           margin-bottom: 20px;
         }
-        color: var(--ylb-color-white);
+        color: var(--ylb-color-white, white);
         background-color: rgba(var(--wsSecondaryColorRGB, 0, 0, 0), 0.3);
         border-radius: 20px;
         text-transform: none;
@@ -95,8 +98,8 @@
           margin-right: 0;
         }
         &.active {
-          color: var(--ylb-color-dark-grey);
-          background-color: var(--ylb-color-white);
+          color: var(--ylb-color-dark-grey-1, darkgray);
+          background-color: var(--ylb-color-white, white);
           img {
             display: inline-block;
           }
@@ -104,7 +107,16 @@
       }
     }
     .amenities-filter-control {
+      font-size: 18px;
+      line-height: 28px;
+      font-family: var(--ylb-font-family-verdana);
       border: none;
+
+      .fas {
+        font-size: 11px;
+        line-height: 28px;
+        vertical-align: bottom;
+      }
       &:focus {
         box-shadow: none;
       }
@@ -115,8 +127,8 @@
     font-family: var(--ylb-font-family-medium);
     width: 100%;
     z-index: 10;
-    background-color: var(--ylb-color-white);
-    color: var(--ylb-color-black);
+    background-color: var(--ylb-color-white, white);
+    color: var(--ylb-color-black, black);
     .row {
       padding: 40px 0;
       @include media-breakpoint-down(sm){
@@ -124,6 +136,7 @@
       }
     }
     .amenities-plain-list {
+      font-family: var(--ylb-font-family-verdana);
       display: table-column;
       list-style: none;
       padding: 0;
@@ -131,10 +144,13 @@
       @include media-breakpoint-down(sm){
         columns: 1;
       }
+      label {
+        margin-bottom: 20px;
+      }
     }
     .amenities-group {
       @include media-breakpoint-down(sm){
-        border-bottom: 1px solid var(--ylb-color-light-grey);
+        border-bottom: 1px solid var(--ylb-color-light-grey-3, lightgray);
         padding-left: 30px;
       }
       .group-header {
@@ -192,10 +208,10 @@
             position: absolute;
             top: 0;
             left: 0;
-            height: 25px;
-            width: 25px;
+            height: 21px;
+            width: 21px;
             background-color: white;
-            border: 1px solid var(--ylb-color-light-grey);
+            border: 1px solid var(--ylb-color-light-grey-3, lightgray);
             border-radius: 3px;
             &:after {
               content: "";
@@ -205,7 +221,7 @@
               top: 2px;
               width: 7px;
               height: 15px;
-              border: solid var(--ylb-color-dark-grey);
+              border: solid var(--ylb-color-dark-grey-1, darkgray);
               border-width: 0 3px 3px 0;
               transform: rotate(45deg);
             }
@@ -224,7 +240,7 @@
     .btn {
       margin-right: 25px;
       line-height: 28px;
-      background-color: var(--ylb-color-light-grey);
+      background-color: var(--ylb-color-light-grey-3, lightgray);
       border-radius: 20px;
       text-transform: none;
       padding: 1px 15px;
@@ -243,7 +259,7 @@
       margin-bottom: 40px;
       font-size: 49px;
       line-height: 60px;
-      color: var(--ylb-color-dark-grey);
+      color: var(--ylb-color-dark-grey-1, darkgray);
     }
     .views-row {
       .fa-clock,
@@ -253,25 +269,34 @@
       .node {
         font-size: 18px;
         border-radius: 8px;
-        background-color: var(--ylb-color-white);
+        background-color: var(--ylb-color-white, white);
         box-shadow: 0 0 11px 0 rgba(0,0,0,0.15);
         border: none;
+        font-family: var(--ylb-font-family-verdana);
         .card-body {
           h2 {
             font-size: 30px;
             line-height: 32px;
+            margin-bottom: 23px;
+            font-family: var(--ylb-font-family-cachet);
             a {
               color: var(--wsPrimaryColor, blue);
             }
           }
           .type {
             text-transform: uppercase;
-            color: var(--ylb-color-dark-grey);
+            color: var(--ylb-color-dark-grey-1, darkgray);
             margin-bottom: 20px;
             font-weight: 600;
+            font-size: 15px;
+            line-height: 20px;
             img {
               height: 17.5px;
               margin-right: 10px;
+              display: none;
+            }
+            svg {
+              margin-right: 6px;
             }
           }
           .node__content {
@@ -296,6 +321,11 @@
               font-size: 18px;
               line-height: 28px;
               letter-spacing: -1px;
+              margin-bottom: 20px;
+
+              svg {
+                margin-right: 6px;
+              }
               .field-location-phone {
                 display: inline;
                 a {
@@ -304,7 +334,15 @@
                 }
               }
             }
-            .hours {}
+            .hours {
+              display: flex;
+              align-items: flex-start;
+
+              svg {
+                margin-right: 6px;
+                margin-top: 6px;
+              }
+            }
             .field-branch-hours {
               h4 {
                 display: none;
@@ -326,9 +364,9 @@
             }
             &:hover {
               background-color: var(--wsPartnerColor, black);
-              color: var(--ylb-color-white);
+              color: var(--ylb-color-white, white);
               .fa {
-                color: var(--ylb-color-white);
+                color: var(--ylb-color-white, white);
               }
             }
           }
