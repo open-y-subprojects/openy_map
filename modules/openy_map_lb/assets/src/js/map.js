@@ -595,11 +595,7 @@
         const html = Object.entries(this.state.getTags()).reduce((acc, [tag, value]) => {
           const checked = ($.inArray(tag, this.initial_active_tags) >= 0);
           // Show tags filter as default checkboxes.
-          let tagHtml = `
-<label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
-  <img class="tag_icon inline-hidden-sm" src="/${value.marker_icon}" aria-hidden="true" />
-  <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
-</label>`;
+          let tagHtml = Drupal.theme('openyMapControlCheckbox', checked, tag, '/' + value.marker_icon);
           acc += tagHtml;
           return acc;
         }, '');
@@ -1223,11 +1219,7 @@
         // Show tags filter as default checkboxes.
         const html = Object.entries(this.state.getTags()).reduce((acc, [tag, value]) => {
           const checked = ($.inArray(tag, this.state.getTagsFilter()) >= 0);
-          let tagHtml = `
-<label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
-  <img class="tag_icon inline-hidden-sm" src="${this.origin}/${value.marker_icon}" aria-hidden="true" />
-  <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
-</label>`;
+          let tagHtml = Drupal.theme('openyMapControlCheckbox', checked, tag,`${this.origin}/${value.marker_icon}`);
           acc += tagHtml;
           return acc;
         }, '');
@@ -1398,5 +1390,24 @@
       });
     }
   };
+
+  /**
+   * Theme function for the map control filter checkbox.
+   *
+   * @param {bool} checked
+   *   Whether the checkbox is checked.
+   * @param {string} tag
+   *   The tag name.
+   * @param {string} imageSource
+   *   The source for the checkbox image.
+   *
+   * @return {string}
+   *   The control markup.
+   */
+  Drupal.theme.openyMapControlCheckbox = (checked, tag, imageSource) =>
+    `<label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
+      <img class="tag_icon inline-hidden-sm" src="${imageSource}" aria-hidden="true" />
+      <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
+    </label>`;
 
 })(jQuery, window, Drupal, drupalSettings, once);
