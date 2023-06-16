@@ -111,6 +111,7 @@
       line-height: 28px;
       font-family: var(--ylb-font-family-verdana);
       border: none;
+      text-transform: initial;
 
       .fas {
         font-size: 11px;
@@ -139,7 +140,7 @@
       font-family: var(--ylb-font-family-verdana);
       display: table-column;
       list-style: none;
-      padding: 0;
+      padding: 10px;
       columns: 5;
       @include media-breakpoint-down(sm){
         columns: 1;
@@ -161,6 +162,7 @@
         margin-bottom: 21px;
       }
       ul {
+        font-family: var(--ylb-font-family-verdana);
         margin-bottom: 20px;
       }
       header {
