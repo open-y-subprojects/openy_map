@@ -22,7 +22,7 @@
   }
   .form-control {
     height: auto;
-    border-radius: 10px;
+    border-radius: var(--wsBorderRadius, unset);
     font-size: 18px;
     line-height: 22px;
   }
@@ -50,8 +50,8 @@
         color: var(--wsTertiaryColor, black);
         border: 1px solid var(--ylb-color-light-grey-3, lightgray);
         border-left: none;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-top-right-radius: var(--wsBorderRadius, unset);
+        border-bottom-right-radius: var(--wsBorderRadius, unset);
       }
     }
     .distance {
@@ -84,7 +84,7 @@
         }
         color: var(--ylb-color-white, white);
         background-color: rgba(var(--wsSecondaryColorRGB, 0, 0, 0), 0.3);
-        border-radius: 20px;
+        border-radius: var(--wsBorderRadius, unset);
         text-transform: none;
         input[type="checkbox"] {
           -webkit-appearance: none;
@@ -249,7 +249,7 @@
       margin-right: 25px;
       line-height: 28px;
       background-color: var(--ylb-color-light-grey-3, lightgray);
-      border-radius: 20px;
+      border-radius: var(--wsBorderRadius, unset);
       text-transform: none;
       padding: 1px 15px;
       margin-bottom: 15px;
@@ -276,7 +276,7 @@
       }
       .node {
         font-size: 18px;
-        border-radius: 8px;
+        border-radius: var(--wsBorderRadius, unset);
         background-color: var(--ylb-color-white, white);
         box-shadow: 0 0 11px 0 rgba(0,0,0,0.15);
         border: none;
@@ -361,9 +361,6 @@
         .card-footer {
           background-color: transparent;
           .btn {
-            border-radius: 10px;
-            border-color: var(--wsPartnerColor, black);
-            color: var(--wsPartnerColor, black);
             text-transform: none;
             font-size: 18px;
             line-height: 22px;
@@ -371,8 +368,6 @@
               color: var(--wsPartnerColor, black);
             }
             &:hover {
-              background-color: var(--wsPartnerColor, black);
-              color: var(--ylb-color-white, white);
               .fa {
                 color: var(--ylb-color-white, white);
               }
