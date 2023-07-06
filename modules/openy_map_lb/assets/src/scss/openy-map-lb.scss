@@ -278,8 +278,8 @@
         font-size: 18px;
         border-radius: var(--wsBorderRadius, unset);
         background-color: var(--ylb-color-white, white);
-        box-shadow: 0 0 11px 0 rgba(0,0,0,0.15);
-        border: none;
+        border: var(--wsBorderStyle , none);
+        box-shadow: var(--wsBoxShadow, none);
         font-family: var(--ylb-font-family-verdana);
         .card-body {
           h2 {
@@ -377,5 +377,40 @@
       }
     }
 
+  }
+
+  // WS Style component-level adjustments.
+  // - Border style.
+  &.ws-border-style--solid {
+    .locations-list-lb {
+      .views-row {
+        .node {
+          box-shadow: var(--ylb-border-style-none, none);
+          border: var(--ylb-border-style-solid, none);
+        }
+      }
+    }
+  }
+
+  &.ws-border-style--drop-shadow {
+    .locations-list-lb {
+      .views-row {
+        .node {
+          box-shadow: var(--ylb-border-style-drop-shadow, none);
+          border: var(--ylb-border-style-none, none);
+        }
+      }
+    }
+  }
+
+  &.ws-border-style--none {
+    .locations-list-lb {
+      .views-row {
+        .node {
+          box-shadow: var(--ylb-border-style-none, none);
+          border: var(--ylb-border-style-none, none);
+        }
+      }
+    }
   }
 }
