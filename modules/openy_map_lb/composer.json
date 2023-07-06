@@ -1,0 +1,11 @@
+{
+    "name": "drupal/openy_map_lb",
+    "description": "Renders a map with locations. Provides Layout Builder block for Locations page.",
+    "type": "drupal-module",
+    "require": {
+        "ycloudyusa/y_lb": "^2.2.0",
+        "php": ">=8.1"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev"
+}
