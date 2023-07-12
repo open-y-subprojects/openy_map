@@ -1393,7 +1393,7 @@
 
   /**
    * Theme function for the map control filter checkbox. To override this, see:
-   * https://www.drupal.org/docs/7/theming/working-with-javascript-and-jquery#s-javascript-theming
+   * https://www.drupal.org/node/3374085
    *
    * @param {bool} checked
    *   Whether the checkbox is checked.
