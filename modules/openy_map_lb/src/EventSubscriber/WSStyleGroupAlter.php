@@ -17,6 +17,7 @@ class WSStyleGroupAlter extends WSStyleGroupAlterAbstract implements EventSubscr
     return [
       'inline_block:lb_openy_map' => [
         'border_style_component',
+        'button_fill_component',
       ],
     ];
   }
