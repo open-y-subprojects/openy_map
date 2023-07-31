@@ -364,11 +364,11 @@
             font-size: 18px;
             line-height: 22px;
             .fa {
-              color: var(--wsPartnerColor, black);
+              color: inherit;
             }
             &:hover {
               .fa {
-                color: var(--ylb-color-white, white);
+                color: inherit;
               }
             }
           }
