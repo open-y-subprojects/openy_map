@@ -3,7 +3,7 @@
   "description": "Map application for Open Y Distribution.",
   "type": "drupal-module",
   "require": {
-    "ymcatwincities/openy": "*"
+    "ycloudyusa/yusaopeny": "*"
   },
   "license": "GPL-2.0+",
   "minimum-stability": "dev"
