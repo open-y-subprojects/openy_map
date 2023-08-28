@@ -84,3 +84,31 @@ function openy_map_lb_theme_suggestions_node_alter(array &$suggestions, array $v
     }
   }
 }
+
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function openy_map_lb_preprocess_node__location_type__lb_teaser(&$variables) {
+  $hoursHelper = Drupal::getContainer()->get('y_branch.hours_helper');
+  $node = $variables['elements']['#node'];
+  if (!$node) {
+    return;
+  }
+
+  $branch_hours = $hoursHelper->getBranchHours($node);
+  $holiday_hours = $hoursHelper->getBranchHolidayHours($node);
+  unset($variables['content']['field_branch_hours'][0]['table']);
+  $variables['#attached'] = [
+    'library' => [
+      'openy_map_lb/hours_today',
+    ],
+    'drupalSettings' => [
+      'lb_branch_hours_blocks' => [
+        'exceptions' => $holiday_hours['js_settings'],
+        'tz' => $hoursHelper->getTimezone(),
+      ]
+    ]
+  ];
+  $variables['#attached']['drupalSettings']['lb_branch_hours_blocks']['branch_hours'][$node->id()] = $branch_hours['js_settings'];
+}
