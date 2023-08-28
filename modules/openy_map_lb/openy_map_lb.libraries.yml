@@ -12,3 +12,36 @@ openy_map:
     - core/drupal
     - core/drupalSettings
     - openy_map/jquery.multiselect
+
+hours_today:
+  version: 1.0.0
+  js:
+    assets/js/hours_today.js: { minified: false  }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - openy_map_lb/moment
+    - openy_map_lb/moment-timezone
+
+moment:
+  remote: https://github.com/moment/moment/
+  version: 2.24.0
+  license:
+    name: MIT License
+    url: https://github.com/moment/moment/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    //cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js: { type: external, minified: true }
+
+moment-timezone:
+  remote: https://github.com/moment/moment-timezone
+  version: 0.5.27
+  license:
+    name: MIT License
+    url: https://github.com/moment/moment-timezone/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    //cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.27/moment-timezone.min.js: { type: external, minified: true }
+    //cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.27/moment-timezone-with-data.min.js: { type: external, minified: true }
