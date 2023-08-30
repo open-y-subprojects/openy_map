@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_map;
 
+use Drupal\Core\Url;
 use Drupal\openy_data_wrapper\DataWrapper;
 
 /**
@@ -46,10 +47,12 @@ class OpenyMapDataWrapper extends DataWrapper {
       if (!$coordinates) {
         continue;
       }
-      $uri = !empty($typeIcons[$location->bundle()]) ? $typeIcons[$location->bundle()] :
+
+      $uri = !empty($typeIcons[$location->bundle()]) ? '/' . $typeIcons[$location->bundle()] :
         '/' . \Drupal::service('extension.list.module')->getPath('openy_map') . "/img/map_icon_green.png";
+      $url = Url::fromUserInput($uri);
       $pins[] = [
-        'icon' => $uri,
+        'icon' => $url->toString(),
         'location_id' => (int) $location->id(),
         'tags' => [$tag],
         'lat' => round($coordinates[0]['lat'], 5),

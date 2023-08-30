@@ -58,7 +58,7 @@ function openy_map_lb_node_view_alter( array &$build, EntityInterface $entity, E
   $activeTypes = \Drupal::configFactory()->get('openy_map.settings')->get('active_types');
   $activeTypes = !empty($activeTypes) ? array_keys(array_filter($activeTypes)) : [];
   if ($build['#view_mode'] == 'teaser' && $entity->hasField('field_location_coordinates') && in_array($entity->bundle(), $activeTypes)) {
-    $build['#cache']['contexts'][] = 'url.path.parent';
+    $build['#cache']['contexts'][] = 'url.path';
   }
 }
 
