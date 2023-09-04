@@ -852,7 +852,7 @@
           loc.point = L.latLng(loc.lat, loc.lng);
           const html = `<div class="marker_tooltip">${loc.markup}</div>`;
           const icon_options = {
-            iconUrl: this.origin + '/' + loc.icon,
+            iconUrl: window.location.origin + '/' + loc.icon,
             iconSize: [32, 42],
             iconAnchor: [16, 38],
             popupAnchor: [0, -36]
@@ -1219,7 +1219,7 @@
         // Show tags filter as default checkboxes.
         const html = Object.entries(this.state.getTags()).reduce((acc, [tag, value]) => {
           const checked = ($.inArray(tag, this.state.getTagsFilter()) >= 0);
-          let tagHtml = Drupal.theme('openyMapControlCheckbox', checked, tag,`${this.origin}/${value.marker_icon}`);
+          let tagHtml = Drupal.theme('openyMapControlCheckbox', checked, tag,`${window.location.origin}/${value.marker_icon}`);
           acc += tagHtml;
           return acc;
         }, '');
