@@ -1407,7 +1407,7 @@
    */
   Drupal.theme.openyMapControlCheckbox = (checked, tag, imageSource) =>
     `<label class="btn btn-default ${checked ? 'active' : ''}" for="tag_${tag}">
-      <img class="tag_icon inline-hidden-sm" src="${imageSource}" aria-hidden="true" />
+      <img class="tag_icon inline-hidden-sm" src="${imageSource}" aria-hidden="true" alt="" />
       <input autocomplete="off" id="tag_${tag}" class="tag_${tag}" type="checkbox" value="${tag}" ${checked ? 'checked="checked"' : ''}/>${tag}
     </label>`;
 
