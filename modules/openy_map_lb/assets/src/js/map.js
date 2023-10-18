@@ -107,6 +107,11 @@
     }
   };
 
+  const clickSelectedAmenity = function (e) {
+    const value = $('input', e.target).val();
+    this.amenities_filter_el.find(`input[value=${value}]`).click();
+  };
+
   Drupal.openyMap = function () {
     return {
       state: state,
@@ -618,13 +623,18 @@
 
         this.state.getAmenitiesFilter().map((id) => {
           const el = $(`input[value=${id}]`, this.amenities_filter_el).parent();
-          this.selected_amenities_el.append(`<div class='btn' id="selected-amenity-${id}">${el.html()} <i class="fas fa-times"></i></div>`);
+          this.selected_amenities_el.append(`<label class='btn' id="selected-amenity-${id}" tabindex="0" role="button"><span class="visually-hidden">Remove filter:</span> ${el.html()} <i class="fas fa-times"></i></label>`);
         });
 
         $('.btn', this.selected_amenities_el).off('click').on('click', (e) => {
-          const value = $('input', e.target).val();
-          this.amenities_filter_el.find(`input[value=${value}]`).click();
+          clickSelectedAmenity.call(this, e);
         });
+
+        $('.btn', this.selected_amenities_el).on('keyup', (e) => {
+          if (e.code === 'Space' || e.code === 'Enter') {
+            clickSelectedAmenity.call(this, e);
+          }
+        })
       },
 
       // Update locations on the map by setting their visibility
@@ -900,13 +910,18 @@
 
         this.state.getAmenitiesFilter().map((id) => {
           const el = $(`input[value=${id}]`, this.amenities_filter_el).parent();
-          this.selected_amenities_el.append(`<div class='btn' id="selected-amenity-${id}">${el.html()} <i class="fas fa-times"></i></div>`);
+          this.selected_amenities_el.append(`<label class='btn' id="selected-amenity-${id}" tabindex="0" role="button"><span class="visually-hidden">Remove filter:</span> ${el.html()} <i class="fas fa-times"></i></label>`);
         });
 
         $('.btn', this.selected_amenities_el).off('click').on('click', (e) => {
-          const value = $('input', e.target).val();
-          this.amenities_filter_el.find(`input[value=${value}]`).click();
+          clickSelectedAmenity.call(this, e);
         });
+
+        $('.btn', this.selected_amenities_el).on('keyup', (e) => {
+          if (e.code === 'Space' || e.code === 'Enter') {
+            clickSelectedAmenity.call(this, e);
+          }
+        })
       },
 
       hookup_state_events: function () {

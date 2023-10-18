@@ -264,6 +264,11 @@
       input {
         display: none;
       }
+      &:hover,
+      &:focus {
+        outline: 5px auto Highlight;
+        outline: 5px auto var(--wsPrimaryColor, -webkit-focus-ring-color);
+      }
     }
   }
   .locations-list-lb {
