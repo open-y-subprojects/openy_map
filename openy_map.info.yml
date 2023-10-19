@@ -10,4 +10,4 @@ dependencies:
   - openy_data_wrapper:openy_data_wrapper
   - geolocation_google_maps:geolocation_google_maps
   - openy_upgrade_tool:openy_upgrade_tool
-  - y_branch:y_branch
+  - drupal:y_branch
