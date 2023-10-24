@@ -6,6 +6,7 @@
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
 /**
@@ -95,6 +96,22 @@ function openy_map_lb_preprocess_node__location_type__lb_teaser(&$variables) {
   if (!$node) {
     return;
   }
+
+  $directions_url = '';
+  if (isset($variables['content']['field_location_directions']['0'])) {
+    $directions_url = $variables['content']['field_location_directions']['0']['#url']->toString();
+  }
+  else if (!empty($node->get('field_location_address')->getValue())) {
+    $address_array = $node->get('field_location_address')->getValue()[0];
+    $directions_url = Url::fromUri('https://www.google.com/maps/dir/', [
+      'query' => [
+        'api' => 1,
+        'destination' => "{$address_array['address_line1']} {$address_array['locality']}, {$address_array['administrative_area']} {$address_array['postal_code']}",
+      ],
+    ])->toString();
+  }
+
+  $variables['content']['field_location_directions']['#url'] = $directions_url;
 
   $branch_hours = $hoursHelper->getBranchHours($node);
   $holiday_hours = $hoursHelper->getBranchHolidayHours($node);
