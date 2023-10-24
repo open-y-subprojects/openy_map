@@ -58,7 +58,7 @@ class OpenyMapDataWrapper extends DataWrapper {
         'lat' => round($coordinates[0]['lat'], 5),
         'lng' => round($coordinates[0]['lng'], 5),
         'name' => $location->label(),
-        'markup' => $this->renderer->render($view),
+        'markup' => $this->renderer->renderPlain($view),
       ];
     }
 
