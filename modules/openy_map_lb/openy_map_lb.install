@@ -12,3 +12,24 @@ function openy_map_lb_update_9001(&$sandbox) {
     'block_content.type.lb_openy_map',
   ]);
 }
+
+/**
+ * Update locations listing view.
+ */
+function openy_map_lb_update_91001() {
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_map_lb') . '/config/install/';
+
+  $configs = [
+    'views.view.locations_lb' => [
+      'display',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
