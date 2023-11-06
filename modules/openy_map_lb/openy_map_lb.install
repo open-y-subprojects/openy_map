@@ -21,7 +21,7 @@ function openy_map_lb_update_91001() {
 
   $configs = [
     'views.view.locations_lb' => [
-      'display',
+      'display.default.display_options.style.options.row_class',
     ],
   ];
 
