@@ -251,9 +251,10 @@
   .selected-amenities {
     padding: 0 10px;
     .btn {
+      width: fit-content;
       margin-right: 25px;
       line-height: 28px;
-      background-color: var(--ylb-color-light-grey-3, lightgray);
+      background-color: var(--ylb-color-light-grey-1, lightgray);
       border-radius: var(--wsBorderRadius, unset);
       text-transform: none;
       padding: 1px 15px;
@@ -264,6 +265,11 @@
       input {
         display: none;
       }
+
+      i.fas {
+        padding-left: 15px;
+      }
+
       &:hover,
       &:focus {
         outline: 5px auto Highlight;
