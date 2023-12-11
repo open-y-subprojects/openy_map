@@ -154,6 +154,10 @@
       @include media-breakpoint-down(sm){
         columns: 1;
       }
+
+      li {
+        break-inside: avoid-column;
+      }
     }
     .amenities-group {
       @include media-breakpoint-down(sm){
