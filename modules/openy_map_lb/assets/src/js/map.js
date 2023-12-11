@@ -108,7 +108,10 @@
   };
 
   const clickSelectedAmenity = function (e) {
-    const value = $('input', e.target).val();
+    let value = $('input', e.target).val();
+    if(!value) {
+      value = $('input', e.currentTarget).val();
+    }
     this.amenities_filter_el.find(`input[value=${value}]`).click();
   };
 
