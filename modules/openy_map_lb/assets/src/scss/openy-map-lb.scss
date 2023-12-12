@@ -157,6 +157,8 @@
 
       li {
         break-inside: avoid-column;
+        display: inline-block;
+        margin-top: 0.175em;
       }
     }
     .amenities-group {
