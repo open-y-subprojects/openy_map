@@ -158,7 +158,7 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
       'items' => [],
     ];
     $terms = $this->taxonomyStorage->loadTree(self::AMENITIES_VOCABULARY, 0, 2, TRUE);
-    $max_depth = max(array_column($terms, 'depth'));
+    $max_depth = empty($terms) ? 0 : max(array_column($terms, 'depth'));
     if ($max_depth > 0) {
       $result['type'] = 'groups';
     }
