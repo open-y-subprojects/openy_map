@@ -2,6 +2,8 @@
 
 namespace Drupal\openy_map;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 
@@ -39,17 +41,30 @@ class OpenyMapManager {
   }
 
   /**
-   * Load all node types with 'field_location_address' field.
+   * Get all the node types using field_location_coordinates
    *
    * @return array
-   *   Array of node types.
+   *  Contains all the node types using the field.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getLocationNodeTypes() {
-    $fieldMap = $this->entityFieldManager->getFieldMap();
-    $locationBundles = $fieldMap['node']['field_location_coordinates']['bundles'];
-    $nodeTypes = $this->entityTypeManager->getStorage('node_type')->loadByProperties(['type' => array_keys($locationBundles)]);
+  public static function getLocationNodeTypes() {
+    $node_types = [];
+    $types = \Drupal::entityTypeManager()
+      ->getStorage('node_type')
+      ->loadMultiple();
 
-    return $nodeTypes;
+    $all_bundle_fields = \Drupal::service('entity_field.manager');
+    if (!empty($types)) {
+      foreach($types as $type) {
+        $definitions = $all_bundle_fields->getFieldDefinitions('node', $type->id());
+        if (isset($definitions['field_location_coordinates'])) {
+          $node_types[$type->id()] = $type;
+        }
+      }
+    }
+    return $node_types;
   }
 
 }
