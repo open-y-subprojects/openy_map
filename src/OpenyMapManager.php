@@ -49,13 +49,13 @@ class OpenyMapManager {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public static function getLocationNodeTypes() {
+  public function getLocationNodeTypes() {
     $node_types = [];
-    $types = \Drupal::entityTypeManager()
+    $types = $this->entityTypeManager
       ->getStorage('node_type')
       ->loadMultiple();
 
-    $all_bundle_fields = \Drupal::service('entity_field.manager');
+    $all_bundle_fields = $this->entityFieldManager;
     if (!empty($types)) {
       foreach($types as $type) {
         $definitions = $all_bundle_fields->getFieldDefinitions('node', $type->id());
