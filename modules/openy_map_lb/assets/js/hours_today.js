@@ -35,7 +35,6 @@
       var hoursData = drupalSettings.lb_branch_hours_blocks.branch_hours[nid] || {};
       var tz = drupalSettings.lb_branch_hours_blocks.tz || 'America/New York';
       tz = tz.replace(/ /g, "_");
-      console.log(hoursData);
 
       if (Object.keys(hoursData).length) {
         var todayString = Drupal.behaviors.today_hours.getDate(tz);
