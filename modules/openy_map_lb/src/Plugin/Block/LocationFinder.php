@@ -163,8 +163,14 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
       $result['type'] = 'groups';
     }
 
+    $lang_code = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+
     foreach ($terms as $term) {
       /** @var \Drupal\taxonomy\Entity\Term $term */
+      if ($term->hasTranslation($lang_code)) {
+        $term = $term->getTranslation($lang_code);
+      }
+
       if ( $term->depth === 0 ) {
         $result['items'][$term->id()] = [
           'item' => $term,
