@@ -5,6 +5,7 @@ namespace Drupal\openy_map_lb\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\openy_socrates\OpenySocratesFacade;
 use Drupal\views\Views;
@@ -39,13 +40,29 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
   protected $configFactory;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, OpenySocratesFacade $socrates, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    OpenySocratesFacade $socrates,
+    ConfigFactoryInterface $config_factory,
+    EntityTypeManagerInterface $entity_type_manager,
+    LanguageManagerInterface $language_manager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->socrates = $socrates;
     $this->configFactory = $config_factory;
     $this->taxonomyStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -58,7 +75,8 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
       $plugin_definition,
       $container->get('socrates'),
       $container->get('config.factory'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -163,8 +181,14 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
       $result['type'] = 'groups';
     }
 
+    $lang_code = $this->languageManager->getCurrentLanguage()->getId();
+
     foreach ($terms as $term) {
       /** @var \Drupal\taxonomy\Entity\Term $term */
+      if ($term->hasTranslation($lang_code)) {
+        $term = $term->getTranslation($lang_code);
+      }
+
       if ( $term->depth === 0 ) {
         $result['items'][$term->id()] = [
           'item' => $term,
