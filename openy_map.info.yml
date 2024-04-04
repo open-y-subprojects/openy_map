@@ -4,6 +4,7 @@ description: Renders a map with locations. Provides blocks for Locations page.
 core_version_requirement: ^8 || ^9 || ^10
 version: 1.15
 package: Open Y
+configure: openy_map.settings
 dependencies:
   - geolocation:geolocation
   - openy_socrates:openy_socrates

@@ -1,0 +1,39 @@
+openy_map.settings:
+  type: config_object
+  label: 'Openy Map Settings'
+  mapping:
+    default_tags:
+      type: sequence
+      label: 'Default Tags'
+      sequence:
+        type: string
+        label: 'Content Type'
+        translatable: true
+    block_labels:
+      type: sequence
+      label: 'Block Labels'
+      sequence:
+        type: label
+        label: 'Content Type'
+        translatable: true
+    type_labels:
+      type: sequence
+      label: 'Type Labels'
+      sequence:
+        type: label
+        label: 'Content Type'
+        translatable: true
+    active_types:
+      type: sequence
+      label: 'Active Types'
+      sequence:
+        type: label
+        label: 'Content Type'
+        translatable: true
+    type_icons:
+      type: sequence
+      label: 'Type Icons'
+      sequence:
+        type: string
+        label: 'Content Type'
+        translatable: true
