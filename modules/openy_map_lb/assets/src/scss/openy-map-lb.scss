@@ -212,8 +212,8 @@
           grid-template-columns: 1em auto;
           gap: 1em;
           // Adjust the top margin by the input translation so the top isn't cut off.
-          margin-top: 0.175em;
-          margin-bottom: calc(20px - 0.175em);
+          margin-top: 0.2em;
+          margin-bottom: calc(20px - 0.2em);
           // Checkbox styles via https://moderncss.dev/pure-css-custom-checkbox-style/
           input[type="checkbox"] {
             appearance: none;
