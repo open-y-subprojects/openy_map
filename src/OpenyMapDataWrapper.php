@@ -20,10 +20,13 @@ class OpenyMapDataWrapper extends DataWrapper {
       $location_ids[] = $id;
     }
     else {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
       $location_ids = $this->entityTypeManager->getStorage('node')
         ->getQuery()
         ->condition('type', $type)
         ->condition('status', 1)
+        ->condition('langcode', $langcode)
         ->accessCheck(FALSE)
         ->execute();
     }
