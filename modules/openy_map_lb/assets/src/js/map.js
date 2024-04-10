@@ -559,7 +559,7 @@
         }
 
         return locations.filter((loc) => {
-          if (loc.amenities.length === 0) {
+          if (!("amenities" in loc) || loc.amenities.length === 0) {
             return false;
           }
           const intersection = loc.amenities.filter(x => this.state.getAmenitiesFilter().includes(x));
@@ -1146,7 +1146,7 @@
         }
 
         return locations.filter((loc) => {
-          if (loc.amenities.length === 0) {
+          if (!("amenities" in loc) || loc.amenities.length === 0) {
             return false;
           }
           const intersection = loc.amenities.filter(x => this.state.getAmenitiesFilter().includes(x));
