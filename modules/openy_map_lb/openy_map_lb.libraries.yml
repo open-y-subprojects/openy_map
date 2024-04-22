@@ -1,5 +1,5 @@
 openy_map:
-  version: 1.0.21
+  version: 1.0.22
   js:
     assets/js/map.js: { preprocess: true }
   css:
