@@ -148,9 +148,19 @@ function openy_map_update_8008() {
     ->save(TRUE);
 }
 
- /**
+/**
  * Update path to icons.
  */
 function openy_map_update_8009() {
   _openy_map_absolutize_config_icon_urls();
+}
+
+/**
+ * Adds default language condition to the view location.
+ */
+function openy_map_update_8010() {
+  $config_path = \Drupal::service('extension.path.resolver')->getPath('module', 'openy_map') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('views.view.locations', $source->read('views.view.locations'));
 }
