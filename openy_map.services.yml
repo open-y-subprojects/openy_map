@@ -13,5 +13,6 @@ services:
       - '@cache.data'
       - '@logger.channel.openy_data_wrapper'
       - '@config.factory'
+      - '@language_manager'
     tags:
       - { name: "openy_data_service", priority: 120 }
