@@ -154,24 +154,3 @@ function openy_map_update_8008() {
 function openy_map_update_8009() {
   _openy_map_absolutize_config_icon_urls();
 }
-
-/**
- * Adds default language condition to the view location.
- */
-function openy_map_update_8010() {
-  $config_dir = \Drupal::service('extension.path.resolver')->getPath('module', 'openy_map') . '/config/install/';
-  // Update multiple configurations.
-  $configs = [
-    'views.view.locations' => [
-      'required',
-    ],
-  ];
-
-  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  foreach ($configs as $config_name => $params) {
-    $config = $config_dir . $config_name . '.yml';
-    foreach ($params as $param) {
-      $config_updater->update($config, $config_name, $param);
-    }
-  }
-}
