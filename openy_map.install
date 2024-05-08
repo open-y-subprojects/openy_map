@@ -148,7 +148,7 @@ function openy_map_update_8008() {
     ->save(TRUE);
 }
 
- /**
+/**
  * Update path to icons.
  */
 function openy_map_update_8009() {
