@@ -44,9 +44,13 @@
   {{ title_suffix }}
 
   {% if header %}
-    <header>
-      {{ header }}
-    </header>
+    <div class="row">
+      <div class="col-12 location-title--wrapper">
+        <header>
+          {{ header }}
+        </header>
+      </div>
+    </div>
   {% endif %}
 
   {{ exposed }}

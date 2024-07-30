@@ -296,6 +296,21 @@
       margin-bottom: 40px;
       font-size: 49px;
       line-height: 60px;
+      width: 100%;
+
+      &--wrapper {
+        justify-content: start;
+        display: flex;
+
+        @include media-breakpoint-down(sm){
+          justify-content: center;
+
+          header {
+            width: 100%;
+            max-width: 330px;
+          }
+        }
+      }
     }
     .views-row {
       display: flex;
