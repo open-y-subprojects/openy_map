@@ -226,7 +226,17 @@
     margin-top: 40px;
     margin-bottom: 40px;
     font-size: 49px;
-    line-height: 60px; }
+    line-height: 60px;
+    width: 100%; }
+    .block-openy-map .locations-list-lb .location-title--wrapper {
+      justify-content: start;
+      display: flex; }
+      @media (max-width: 767.98px) {
+        .block-openy-map .locations-list-lb .location-title--wrapper {
+          justify-content: center; }
+          .block-openy-map .locations-list-lb .location-title--wrapper header {
+            width: 100%;
+            max-width: 330px; } }
   .block-openy-map .locations-list-lb .views-row {
     display: flex;
     justify-content: center; }
