@@ -128,4 +128,9 @@ function openy_map_lb_preprocess_node__location_type__lb_teaser(&$variables) {
     ]
   ];
   $variables['#attached']['drupalSettings']['lb_branch_hours_blocks']['branch_hours'][$node->id()] = $branch_hours['js_settings'];
+
+  // Use the bundle label, not the machine name, to respect translation and 
+  // changes to the name made in bundle config.
+  // via https://drupal.stackexchange.com/a/187983/24177
+  $variables['bundle_label'] = $node->type->entity->label();
 }
