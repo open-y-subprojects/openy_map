@@ -87,12 +87,10 @@
         border-radius: var(--wsBorderRadius, unset);
         text-transform: none;
         input[type="checkbox"] {
-          -webkit-appearance: none;
-          appearance: none;
+          margin-right: 5px;
         }
         img {
           height: 20px;
-          display: none;
         }
         &:last-child {
           margin-right: 0;
