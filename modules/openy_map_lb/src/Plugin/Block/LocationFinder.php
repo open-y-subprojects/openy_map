@@ -120,7 +120,7 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
             '@unit' => $units_map[$units],
           ]
         ),
-        'selected' => '',
+        'selected' => $distance == '10' ? 'selected' : '',
       ];
     }
     return $options;
