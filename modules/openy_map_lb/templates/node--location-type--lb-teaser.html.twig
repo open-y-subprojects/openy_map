@@ -113,7 +113,7 @@
                   {{ "Phone"|t }} {{ content.field_location_phone }}
                 </div>
             {% endif %}
-            {% if content.field_branch_hours %}
+            {% if content.field_branch_hours and node.field_branch_hours.value is not empty %}
                 <div class="hours">
                   {% include "@openy_map_lb/svg/clock_icon.html.twig" %}
                   {{ content.field_branch_hours }}</div>
