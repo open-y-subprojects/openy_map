@@ -1,9 +1,9 @@
 name: Open Y Map
 type: module
 description: Renders a map with locations. Provides blocks for Locations page.
-core_version_requirement: ^9 || ^10
-version: 5.1.1
-package: Open Y
+core_version_requirement: ^10 || ^11
+version: 6.0.0
+package: YMCA Website Services
 configure: openy_map.settings
 dependencies:
   - geolocation:geolocation
