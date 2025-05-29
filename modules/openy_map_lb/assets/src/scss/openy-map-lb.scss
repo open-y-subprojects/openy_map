@@ -327,84 +327,7 @@
         border: var(--wsBorderStyle , none);
         box-shadow: var(--wsBoxShadow, none);
         font-family: var(--ylb-font-family-verdana);
-        .card-body {
-          h2 {
-            font-size: 30px;
-            line-height: 32px;
-            margin-bottom: 23px;
-            font-family: var(--ylb-font-family-cachet);
-            a {
-              color: var(--wsPrimaryColor, blue);
-            }
-          }
-          .type {
-            text-transform: uppercase;
-            color: var(--ylb-color-dark-grey-1, darkgray);
-            margin-bottom: 20px;
-            font-weight: 600;
-            font-size: 15px;
-            line-height: 20px;
-            img {
-              height: 17.5px;
-              margin-right: 10px;
-              display: none;
-            }
-            svg {
-              margin-right: 6px;
-            }
-          }
-          .node__content {
-            padding: 0;
-            a {
-              text-decoration: underline;
-            }
-            address {
-              margin-bottom: 0;
-              .fa-map-marker-alt {
-                display: none;
-              }
-            }
 
-            .directions {
-              margin-bottom: 20px;
-              padding-left: 25px;
-              a {
-                color: var(--wsPartnerColor, blue);
-              }
-            }
-            .phone {
-              font-size: 18px;
-              line-height: 28px;
-              letter-spacing: -1px;
-              margin-bottom: 20px;
-
-              svg {
-                margin-right: 6px;
-              }
-              .field-location-phone {
-                display: inline;
-                a {
-                  font-weight: normal;
-                  color: var(--wsPartnerColor, blue);
-                }
-              }
-            }
-            .hours {
-              display: flex;
-              align-items: flex-start;
-
-              svg {
-                margin-right: 6px;
-                margin-top: 6px;
-              }
-            }
-            .field-branch-hours {
-              h4 {
-                display: none;
-              }
-            }
-          }
-        }
         .card-footer {
           background-color: transparent;
           .btn {
@@ -424,6 +347,101 @@
       }
     }
 
+  }
+
+  .card-body {
+    h2 {
+      font-size: 30px;
+      line-height: 32px;
+      margin-bottom: 23px;
+      font-family: var(--ylb-font-family-cachet);
+      a {
+        color: var(--wsPrimaryColor, blue);
+      }
+    }
+    .type {
+      text-transform: uppercase;
+      color: var(--ylb-color-dark-grey-1, darkgray);
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 20px;
+      img {
+        height: 17.5px;
+        margin-right: 10px;
+        display: none;
+      }
+      svg {
+        margin-right: 6px;
+      }
+    }
+    .node__content {
+      padding: 0;
+      a {
+        text-decoration: underline;
+      }
+      address {
+        margin-bottom: 0;
+        .fa-map-marker-alt {
+          display: none;
+        }
+      }
+
+      .directions {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        a {
+          color: var(--wsPartnerColor, blue);
+        }
+      }
+      .phone {
+        font-size: 18px;
+        line-height: 28px;
+        letter-spacing: -1px;
+        margin-bottom: 20px;
+
+        svg {
+          margin-right: 6px;
+        }
+        .field-location-phone {
+          display: inline;
+          a {
+            font-weight: normal;
+            color: var(--wsPartnerColor, blue);
+          }
+        }
+      }
+      .hours {
+        display: flex;
+        align-items: flex-start;
+
+        svg {
+          margin-right: 6px;
+          margin-top: 6px;
+        }
+      }
+      .field-branch-hours {
+        h4 {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // Specific styles for map tooltip cards.
+  .marker_tooltip {
+    .card-body {
+      .node__content address .fa-map-marker-alt {
+        display: block;
+        // Needs to be important to override `text-gray-300` from Carnation.
+        color: var(--wsTertiaryColor, black) !important;
+      }
+
+      // Hide hours since hours_today can't properly rewrite it.
+      .hours {
+        display: none;
+      }
+    }
   }
 
   // WS Style component-level adjustments.
