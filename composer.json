@@ -4,8 +4,8 @@
   "type": "drupal-module",
   "require": {
     "ycloudyusa/yusaopeny": "*",
-    "open-y-subprojects/openy_custom": "^2.5.0",
-    "drupal/y_branch": "^1.0.14"
+    "open-y-subprojects/openy_custom": "^2.5.0 || ^3.0.0",
+    "drupal/y_branch": "^1.1.1"
   },
   "license": "GPL-2.0+",
   "minimum-stability": "dev"

@@ -5,5 +5,5 @@ core_version_requirement: ^10 || ^11
 version: 2.0.0
 package: 'YMCA Website Services'
 dependencies:
-  - openy_map:openy_map
-  - y_lb:y_lb (>=4)
+  - openy_map
+  - y_lb
