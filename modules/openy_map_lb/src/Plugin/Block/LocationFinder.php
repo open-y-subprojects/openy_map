@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\openy_socrates\OpenySocratesFacade;
+use Drupal\taxonomy\TermStorageInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -45,6 +46,11 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
+
+  /**
+   * The taxonomy term storage.
+   */
+  protected TermStorageInterface $taxonomyStorage;
 
   /**
    * {@inheritdoc}
