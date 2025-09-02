@@ -5,6 +5,7 @@ namespace Drupal\openy_map\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\openy_map\OpenyMapManager;
@@ -29,9 +30,11 @@ class SettingsForm extends ConfigFormBase {
    *   Config factory.
    * @param \Drupal\openy_map\OpenyMapManager $openy_map_manager
    *   The OpenY Map manager.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed config manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, OpenyMapManager $openy_map_manager) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager,OpenyMapManager $openy_map_manager) {
+    parent::__construct($config_factory, $typedConfigManager);
     $this->openyMapManager = $openy_map_manager;
   }
 
@@ -41,6 +44,7 @@ class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('openy_map.manager')
     );
   }
