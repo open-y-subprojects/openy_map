@@ -110,13 +110,19 @@
             {% if content.field_location_phone %}
                 <div class="phone">
                   {% include "@openy_map_lb/svg/phone_icon.html.twig" %}
-                  {{ "Phone"|t }} {{ content.field_location_phone }}
+                  {{ content.field_location_phone }}
                 </div>
             {% endif %}
             {% if content.field_branch_hours and node.field_branch_hours.value is not empty %}
                 <div class="hours">
                   {% include "@openy_map_lb/svg/clock_icon.html.twig" %}
-                  {{ content.field_branch_hours }}</div>
+                    {% set items = content.field_branch_hours|filter((v, k)  => k|first != '#')  %}
+                    {% if items is not empty %}
+                        <div class="field-branch-hours field-item">
+                            {{ items|first }}
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>

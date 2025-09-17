@@ -20,7 +20,7 @@
               <div class="form-group">
                 <label for="distance_limit">{{ 'Distance'|t }}</label>
                 <select class="distance_limit_value distance_limit form-control form-select" id="distance_limit">
-                  <option class="all_locations" value="all_locations" selected="selected">{{ 'Any distance' | t }}</option>
+                  <option class="all_locations" value="all_locations">{{ 'Any distance' | t }}</option>
                   {% for option in element['#options'] %}
                     <option value="{{ option.value }}"
                             {{ option.selected }}>
