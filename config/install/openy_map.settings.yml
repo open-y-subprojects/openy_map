@@ -1,4 +1,7 @@
 map_engine: leaflet
+noscript_text:
+  value: 'This map shows location pins for nearby locations. To use it, please enable JavaScript in your browser.'
+  format: plain_text
 distance_limit_units: ml
 leaflet:
   base_layer: OpenStreetMap.Mapnik

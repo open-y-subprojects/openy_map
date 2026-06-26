@@ -58,6 +58,10 @@ class OpenYMap extends RenderElement {
         break;
     }
     $element['#attached']['drupalSettings']['openyMap'] = $element['#element_variables'];
+    $noscript = $settings->get('noscript_text');
+    if (!empty($noscript['value'])) {
+      $element['#noscript_text'] = check_markup($noscript['value'], $noscript['format'] ?? 'plain_text');
+    }
     $tags = $settings->get('default_tags');
     $element['#attached']['drupalSettings']['openyMapSettings']['default_tags'] = array_values(array_filter($tags));
     $element['#cache']['tags'][] = 'config:openy_map.settings';

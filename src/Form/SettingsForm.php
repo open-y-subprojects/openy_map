@@ -68,6 +68,15 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->config('openy_map.settings');
     $form_state->setCached(FALSE);
 
+    $noscript = $config->get('noscript_text');
+    $form['noscript_text'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('No-script message'),
+      '#description' => $this->t('Message shown inside a &lt;noscript&gt; tag when JavaScript is disabled. Displayed in place of the map canvas.'),
+      '#default_value' => $noscript['value'] ?? $this->t('This map shows location pins for nearby locations. To use it, please enable JavaScript in your browser.'),
+      '#format' => $noscript['format'] ?? 'plain_text',
+    ];
+
     $form['map_engine_title'] = [
       '#markup' => '<h2>' . $this->t('Map provider') . '</h2>',
     ];
@@ -348,6 +357,7 @@ class SettingsForm extends ConfigFormBase {
       $type_icons[$id] = $form_state->getValue($id . '_icon');
     }
 
+    $config->set('noscript_text', $form_state->getValue('noscript_text'));
     $config->set('map_engine', $form_state->getValue('map_engine'));
     $config->set('distance_limit_units', $form_state->getValue('distance_limit_units'));
     $config->set('leaflet.location', $form_state->getValue('leaflet')['location']);

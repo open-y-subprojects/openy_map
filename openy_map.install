@@ -126,12 +126,12 @@ function openy_map_update_8006() {
   $openy_map_config_leaflet_base_layer = $config_factory->getEditable('openy_map.settings')->get('leaflet.base_layer');
   if ($openy_map_config_leaflet_base_layer == 'Wikimedia'){
     $config_factory->getEditable('openy_map.settings')
-    ->set('leaflet.base_layer', 'OpenStreetMap.Mapnik')
-    ->save(TRUE);
+      ->set('leaflet.base_layer', 'OpenStreetMap.Mapnik')
+      ->save(TRUE);
   }
 }
 
- /**
+/**
  * Update path to icons.
  */
 function openy_map_update_8007() {
@@ -153,4 +153,17 @@ function openy_map_update_8008() {
  */
 function openy_map_update_8009() {
   _openy_map_absolutize_config_icon_urls();
+}
+
+/**
+ * Add noscript_text configuration.
+ */
+function openy_map_update_8010() {
+  $config = \Drupal::configFactory()->getEditable('openy_map.settings');
+  if ($config->get('noscript_text') === NULL) {
+    $config->set('noscript_text', [
+      'value' => 'This map shows location pins for nearby locations. To use it, please enable JavaScript in your browser.',
+      'format' => 'plain_text',
+    ])->save(TRUE);
+  }
 }
