@@ -2,6 +2,17 @@ openy_map.settings:
   type: config_object
   label: 'Openy Map Settings'
   mapping:
+    noscript_text:
+      type: mapping
+      label: 'No-script message'
+      mapping:
+        value:
+          type: text
+          label: 'Text'
+          translatable: true
+        format:
+          type: string
+          label: 'Text format'
     default_tags:
       type: sequence
       label: 'Default Tags'

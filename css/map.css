@@ -1,4 +1,7 @@
 .openy-map-canvas {
     height: 300px;
     width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
