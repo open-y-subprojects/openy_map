@@ -66,9 +66,21 @@ function openy_map_library_info_alter(&$libraries, $extension) {
     if ($key != 'https://maps.googleapis.com/maps/api/js') {
       continue;
     }
-    $api_key = \Drupal::configFactory()->get('geolocation_google_maps.settings')->get('google_map_api_key');
+    $config = \Drupal::configFactory()->get('geolocation_google_maps.settings');
+    $api_key = $config->get('google_map_api_key');
+    $url = $key . '?key=' . $api_key;
+    // Apply the same region/language URL parameters the geolocation module
+    // already exposes in its settings, so disputed/shared features (e.g.
+    // border lakes) render with the locale-appropriate names and the map
+    // isn't silently biased towards the US default.
+    $custom_parameters = $config->get('google_map_custom_url_parameters') ?: [];
+    foreach (['region', 'language'] as $param) {
+      if (!empty($custom_parameters[$param])) {
+        $url .= '&' . $param . '=' . rawurlencode($custom_parameters[$param]);
+      }
+    }
     unset($libraries['gmaps']['js'][$key]);
-    $libraries['gmaps']['js'][$key . '?key=' . $api_key] = $value;
+    $libraries['gmaps']['js'][$url] = $value;
   }
 }
 
