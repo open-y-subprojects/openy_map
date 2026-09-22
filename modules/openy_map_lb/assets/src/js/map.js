@@ -858,30 +858,34 @@
           this.search_center_marker.removeFrom(this.map);
         }
       },
-
       init_map_locations: function () {
         const iconOptionsKeys = ['iconSize', 'shadowSize', 'iconAnchor', 'shadowAnchor', 'popupAnchor'];
-        this.locations.map((loc) => {
+
+        this.locations.forEach((loc) => {
           loc.point = L.latLng(loc.lat, loc.lng);
           const html = `<div class="marker_tooltip">${loc.markup}</div>`;
+
+          // Start with defaults
           const icon_options = {
             iconUrl: window.location.origin + '/' + loc.icon,
             iconSize: [32, 42],
             iconAnchor: [16, 38],
             popupAnchor: [0, -36]
           };
-          $(iconOptionsKeys).each(function (key) {
-            if (typeof loc[key] !== 'undefined') {
-              icon_options[key] = loc[key];
+
+          // Merge in overrides if the location has them
+          iconOptionsKeys.forEach((k) => {
+            if (typeof loc[k] !== 'undefined') {
+              icon_options[k] = loc[k];
             }
           });
+
           const icon = loc.icon ? L.icon(icon_options) : new L.Icon.Default();
-          const marker = L.marker(loc.point, {
-            icon: icon
-          });
-          marker.bindPopup(html, { maxWidth: 180 }).openPopup();
+
+          const marker = L.marker(loc.point, { icon });
+          marker.bindPopup(html, { maxWidth: 180 });
           loc.marker = marker;
-        })
+        });
       },
       init_clustering: function () {
         const options = {
@@ -979,6 +983,10 @@
               bounds.extend(L.latLng(data[0].boundingbox[1], data[0].boundingbox[3]));
               this.map.fitBounds(bounds, this.fitBoundsOptions);
             }
+            else {
+              // If no bounding box, just zoom around the point
+              this.map.setView(this.search_center_point, 13);
+            }
 
             this.search_center = this.search_center_point;
             this.draw_search_center();
@@ -1000,7 +1008,7 @@
           this.search_center = this.map.getCenter();
         }
 
-        this.search_center_marker.removeFrom(this.maps);
+        this.search_center_marker.removeFrom(this.map);
         var bounds = L.latLngBounds();
         locations.map((loc) => {
           bounds.extend(loc.point);
@@ -1018,7 +1026,10 @@
         }
 
         this.draw_search_center();
-        this.state.setDistance(this.distance_limit_el.val());
+        // Coerce to number; if not a number, clear the distance filter.
+        const raw = this.distance_limit_el.val();
+        const miles = parseFloat(raw);
+        this.state.setDistance(Number.isFinite(miles) ? miles : '');
       },
 
       // Executed if was provided empty ZIP code.
@@ -1109,29 +1120,30 @@
           return locations;
         }
 
-        if (this.state.getDistance() === '') {
+        const distance = parseFloat(this.state.getDistance());
+        if (!Number.isFinite(distance)) {
+          // No valid distance selected → don’t filter by distance
           return locations;
         }
 
-        const search_center = this.search_center;
-        const lat1 = parseFloat(search_center.lat);
-        const lon1 = parseFloat(search_center.lng);
+        const lat1 = parseFloat(this.search_center.lat);
+        const lon1 = parseFloat(this.search_center.lng);
         const rlat1 = this.toRad(lat1);
 
         return locations.filter(loc => {
-          const R = 3963,
-            lat2 = parseFloat(loc.point.lat),
-            lon2 = parseFloat(loc.point.lng);
+          const R = 3963; // miles
+          const lat2 = parseFloat(loc.point.lat);
+          const lon2 = parseFloat(loc.point.lng);
           const rlat = this.toRad(lat2 - lat1);
           const rlon = this.toRad(lon2 - lon1);
           const rlat2 = this.toRad(lat2);
 
-          const a = Math.sin(rlat / 2) * Math.sin(rlat / 2) + Math.sin(rlon / 2) * Math.sin(rlon / 2) * Math.cos(rlat1) * Math.cos(rlat2);
+          const a = Math.sin(rlat / 2) * Math.sin(rlat / 2)
+                  + Math.sin(rlon / 2) * Math.sin(rlon / 2) * Math.cos(rlat1) * Math.cos(rlat2);
           const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           const d = R * c;
 
-          if (d <= this.state.getDistance()) {
-            // Add the distance to the object.
+          if (d <= distance) {
             loc.distance = d;
             return true;
           }
@@ -1199,7 +1211,7 @@
           filteramenities = '',
           utmListRaw = {},
           utms = '',
-          mapLocation = $('.search_field').val() || (params.hasOwnProperty('map_location') && params.map_location) || '';
+          mapLocation = this.search_field_el.val() || (params.hasOwnProperty('map_location') && params.map_location) || '';
         for (let [key, value] of Object.entries(params)) {
           var prmsKey = key.split("_");
           if (prmsKey[0] === 'utm') {
@@ -1280,9 +1292,6 @@
           }
           else {
             loc.marker.addTo(this.map);
-          }
-          if (loc.name === "Rochester YMCA") {
-            loc.marker.removeFrom(this.map);
           }
         });
         // Don't zoom in too far on only one marker.
