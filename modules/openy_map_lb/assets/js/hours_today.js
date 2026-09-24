@@ -76,4 +76,25 @@
     }
 
   };
+
+  Drupal.behaviors.openy_map_lb_all_hours = {
+    attach: function (context, settings) {
+      $(once('all-hours-toggle', '.all-hours-toggle', context)).on('click', function (e) {
+        e.preventDefault();
+        var id = $(this).data('openy-map-location-id');
+        $('.all-hours-dropdown[data-openy-map-location-id="' + id + '"]').toggle();
+      });
+    }
+  };
+
+// Code to show today's hours in map pin.
+jQuery(document).on('click', '.leaflet-marker-icon', function() {
+  setTimeout(function(){
+    var branchHourID = jQuery(document).find('.marker_tooltip').find('article.node').attr('data-openy-map-location-id');
+    var branchData = jQuery('.views-row').find('[data-openy-map-location-id="' + branchHourID + '"]').find('.field-branch-hours').html();
+    var original_data = jQuery(document).find('.marker_tooltip').find('.field-branch-hours').html();
+    jQuery(document).find('.marker_tooltip').find('.field-branch-hours').html(original_data+branchData);
+  }, 200);
+});
+
 })(jQuery, Drupal);

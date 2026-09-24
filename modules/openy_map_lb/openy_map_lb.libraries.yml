@@ -14,7 +14,7 @@ openy_map:
     - openy_map/jquery.multiselect
 
 hours_today:
-  version: 1.0.0
+  version: 1.0.1
   js:
     assets/js/hours_today.js: { minified: false  }
   dependencies:

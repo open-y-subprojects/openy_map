@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.lb_openy_map
+    - field.storage.block_content.field_show_all_hours
+  module:
+    - block_content
+id: block_content.lb_openy_map.field_show_all_hours
+field_name: field_show_all_hours
+entity_type: block_content
+bundle: lb_openy_map
+label: 'Display hours for the whole week'
+description: 'Adds an "All hours" link to each location card that expands hours for every weekday.'
+required: false
+translatable: false
+default_value:
+  - value: 0
+default_value_callback: ''
+settings: {  }
+field_type: boolean
