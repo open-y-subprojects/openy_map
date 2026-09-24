@@ -116,7 +116,21 @@
             {% if content.field_branch_hours and node.field_branch_hours.value is not empty %}
                 <div class="hours">
                   {% include "@openy_map_lb/svg/clock_icon.html.twig" %}
-                  {{ content.field_branch_hours }}</div>
+                  <div class="hours-text">
+                    {{ content.field_branch_hours }}
+                    {% if show_all_hours %}
+                      <div class="all-hours">
+                        <a href="#" class="all-hours-toggle" data-openy-map-location-id="{{ node.id }}">{{ "All hours"|t }} <i class="fas fa-plus-circle"></i></a>
+                        <div class="all-hours-dropdown" data-openy-map-location-id="{{ node.id }}">
+                          <div class="week-hours">{{ branch_hours_table }}</div>
+                          {% if holiday_hours_table['#rows'] %}
+                            <div class="holiday-hours">{{ holiday_hours_table }}</div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
             {% endif %}
         </div>
     </div>
