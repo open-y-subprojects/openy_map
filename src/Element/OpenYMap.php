@@ -2,14 +2,14 @@
 
 namespace Drupal\openy_map\Element;
 
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 
 /**
  * Class OpenYMap.
  *
  * @RenderElement("openy_map")
  */
-class OpenYMap extends RenderElement {
+class OpenYMap extends RenderElementBase {
 
   /**
    * {@inheritdoc}

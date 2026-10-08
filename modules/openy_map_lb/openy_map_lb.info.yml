@@ -1,7 +1,7 @@
 name: Y Layout Builder - Open Y Map
 type: module
 description: Renders a map with locations. Provides Layout Builder block for Locations page.
-core_version_requirement: ^10 || ^11 || ^12
+core_version_requirement: ^10.3 || ^11 || ^12
 version: 2.0.0
 package: 'YMCA Website Services'
 dependencies:
