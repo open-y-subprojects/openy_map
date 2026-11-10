@@ -39,6 +39,7 @@ leaflet.markercluster:
   version: '1.4.2'
   license:
     name: MIT-LICENSE
+    url: https://github.com/Leaflet/Leaflet.markercluster/blob/master/MIT-LICENCE.txt
     gpl-compatible: true
   css:
     component:
