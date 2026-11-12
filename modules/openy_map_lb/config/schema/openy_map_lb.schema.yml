@@ -1,0 +1,7 @@
+block.settings.location_finder_lb:
+  type: block_settings
+  label: 'Location finder for Layout Builder'
+  mapping:
+    show_all_hours:
+      type: boolean
+      label: 'Display hours for the whole week'

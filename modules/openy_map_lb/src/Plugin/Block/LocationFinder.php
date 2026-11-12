@@ -5,6 +5,7 @@ namespace Drupal\openy_map_lb\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\openy_socrates\OpenySocratesFacade;
@@ -25,6 +26,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LocationFinder extends BlockBase implements ContainerFactoryPluginInterface {
 
   const AMENITIES_VOCABULARY = 'amenities';
+
+  /**
+   * Whether the currently built Location Finder instance shows full week
+   * hours on its cards. Read by openy_map_lb_preprocess_node__location_type__lb_teaser()
+   * during the same request, since Views rows are rendered after build().
+   *
+   * @var bool
+   */
+  protected static $showAllHours = FALSE;
+
+  /**
+   * Whether the current Location Finder block should show all-week hours.
+   *
+   * @return bool
+   */
+  public static function showAllHours() {
+    return static::$showAllHours;
+  }
 
   /**
    * Openy Socrates Facade.
@@ -89,7 +108,40 @@ class LocationFinder extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'show_all_hours' => FALSE,
+    ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form = parent::blockForm($form, $form_state);
+    $form['show_all_hours'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display hours for the whole week'),
+      '#description' => $this->t('Adds an "All hours" link to each location card that expands hours for every weekday.'),
+      '#default_value' => $this->configuration['show_all_hours'],
+    ];
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+    $this->configuration['show_all_hours'] = (bool) $form_state->getValue('show_all_hours');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
+    static::$showAllHours = !empty($this->configuration['show_all_hours']);
+
     return [
       'map' => [
         '#type' => 'openy_map_lb',

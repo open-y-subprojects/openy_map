@@ -3,11 +3,19 @@ status: true
 dependencies:
   config:
     - block_content.type.lb_openy_map
+    - field.field.block_content.lb_openy_map.field_show_all_hours
 id: block_content.lb_openy_map.default
 targetEntityType: block_content
 bundle: lb_openy_map
 mode: default
-content: {  }
+content:
+  field_show_all_hours:
+    type: boolean_checkbox
+    weight: 0
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
 hidden:
   info: true
   langcode: true

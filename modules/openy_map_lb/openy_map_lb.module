@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\openy_map_lb\Plugin\Block\LocationFinder;
 
 /**
  * Implements hook_theme().
@@ -37,6 +38,12 @@ function openy_map_lb_theme($existing, $type, $theme, $path) {
 function openy_map_lb_preprocess_block__lb_openy_map(&$variables) {
   $block_manager = \Drupal::service('plugin.manager.block');
   $config = [];
+  if (isset($variables['content']['#block_content'])) {
+    $block_content = $variables['content']['#block_content'];
+    if ($block_content->hasField('field_show_all_hours')) {
+      $config['show_all_hours'] = (bool) $block_content->get('field_show_all_hours')->value;
+    }
+  }
   $plugin_block = $block_manager->createInstance('location_finder_lb', $config);
   // Some blocks might implement access check.
   $access_result = $plugin_block->access(\Drupal::currentUser());
@@ -116,6 +123,13 @@ function openy_map_lb_preprocess_node__location_type__lb_teaser(&$variables) {
   $branch_hours = $hoursHelper->getBranchHours($node);
   $holiday_hours = $hoursHelper->getBranchHolidayHours($node);
   unset($variables['content']['field_branch_hours'][0]['table']);
+
+  $variables['show_all_hours'] = LocationFinder::showAllHours();
+  if ($variables['show_all_hours']) {
+    $variables['branch_hours_table'] = $branch_hours['table'];
+    $variables['holiday_hours_table'] = $holiday_hours['table'];
+  }
+
   $variables['#attached'] = [
     'library' => [
       'openy_map_lb/hours_today',

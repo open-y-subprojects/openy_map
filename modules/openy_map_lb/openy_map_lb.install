@@ -56,3 +56,33 @@ function openy_map_lb_update_91002() {
     }
   }
 }
+
+/**
+ * Adds field_show_all_hours to the "Location finder" custom block type,
+ * so editors can enable full-week hours on the Location Finder cards.
+ */
+function openy_map_lb_update_91003() {
+  if (!\Drupal\field\Entity\FieldStorageConfig::loadByName('block_content', 'field_show_all_hours')) {
+    \Drupal\field\Entity\FieldStorageConfig::create([
+      'field_name' => 'field_show_all_hours',
+      'entity_type' => 'block_content',
+      'type' => 'boolean',
+    ])->save();
+  }
+
+  if (!\Drupal\field\Entity\FieldConfig::loadByName('block_content', 'lb_openy_map', 'field_show_all_hours')) {
+    \Drupal\field\Entity\FieldConfig::create([
+      'field_name' => 'field_show_all_hours',
+      'entity_type' => 'block_content',
+      'bundle' => 'lb_openy_map',
+      'label' => 'Display hours for the whole week',
+      'description' => 'Adds an "All hours" link to each location card that expands hours for every weekday.',
+      'default_value' => [['value' => 0]],
+    ])->save();
+  }
+
+  \Drupal::service('entity_display.repository')
+    ->getFormDisplay('block_content', 'lb_openy_map', 'default')
+    ->setComponent('field_show_all_hours', ['type' => 'boolean_checkbox'])
+    ->save();
+}
